@@ -15,3 +15,20 @@ export interface ReviewData {
   createdAt : string;
   bookId : number;
 }
+
+// --------------------------------------------------------
+
+export interface CGCproduct {
+  id: number;
+  name: string;
+  expirationDate: string;
+  expirationDateNewLot: string;
+  suggestedRetailPrice: string;
+  suggestedWholesalePrice: string;
+  specification: string;
+  category: string;
+  type: string;
+  itemFeatures: string;
+  imageA: string;
+  imageB: string;
+}

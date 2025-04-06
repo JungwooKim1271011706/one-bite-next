@@ -1,8 +1,15 @@
 import BookItem from "@/components/book-item";
 import style from "./page.module.css";
-import { BookData } from "@/types";
+import { BookData, CGCproduct } from "@/types";
 import BookListSkeleton from "@/components/skeleton/book-list-skeleton";
 import { Metadata } from "next";
+import sqlite3 from "sqlite3";
+import { json } from "stream/consumers";
+import { JWT } from "google-auth-library";
+import credential from "../cron/key.json";
+import { GoogleSpreadsheet } from "google-spreadsheet";
+import CGCProductItem from "@/components/cgcProduct-item";
+import Pagination from "@/components/pagiation";
 
 // 특정 페이지의 유형을 강제로 Static, Dynamic 페이지로 설정
 // 1. auto : 기본값, 아무것도 강제하지 않음.
@@ -47,19 +54,120 @@ async function RecoBooks() {
   return <div>
     {recoBooks.map((book) => (<BookItem key={book.id} {...book} />)) }
   </div>
-
 }
 
-export default async function Home() {
+/**
+ * 천기초의 제품 전체 데이터를 가져온다.
+ */
+
+const docId = "1Rq43xTMCat5JpWe_61SBRqpn5lr7BYJ26Weoaqc-U1Q";
+const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
+let jwtClient: JWT | null = null;
+let cacheDoc: GoogleSpreadsheet | null = null;
+
+export async function getGoogleSheet() : Promise<GoogleSpreadsheet> {
+  if (!jwtClient) {
+    jwtClient = new JWT ({
+        email: credential.client_email,
+        key: credential.private_key,
+        scopes: SCOPES,
+    });
+  }
+
+  if (!cacheDoc) {
+    const doc = new GoogleSpreadsheet(docId, jwtClient);
+    await doc.loadInfo();
+    cacheDoc = doc;
+  }
+  return cacheDoc;
+}
+
+async function getCGCproducts(page: number, size: number): Promise<CGCproduct[]> {
+        cacheDoc = await getGoogleSheet();
+        const sheet = cacheDoc.sheetsByTitle["가격표"];
+        const rows = await sheet.getRows({
+          offset: (page -1) * size,
+          limit: size
+        });
+
+        const cgcProduct: CGCproduct[] = rows.map((row) => {
+            const itemData = row.toObject();
+
+            return {
+                id: Number(itemData['ID']),
+                name: itemData['품 명'],
+                expirationDate: itemData['유통 기한'],
+                expirationDateNewLot: itemData['유통 기한 2 (NEW LOG)'],
+                suggestedRetailPrice: itemData['권장 소매가'],
+                suggestedWholesalePrice: itemData['권장 도매가'],
+                specification: itemData['규 격'],
+                category: itemData['구 분'],
+                type: itemData['항 목'],
+                itemFeatures: itemData['제품 특징'],
+                imageA: itemData['사진A'],
+                imageB: itemData['사진B'],
+            }
+        });
+
+        return cgcProduct;
+}
+
+async function AllCGCProducts(page: number, size: number) {
+    const cgcProducts = await getCGCproducts(page, size);
+    return cgcProducts;
+
+    // return <div>
+    //   {cgcProducts.map((cgcProduct) => <CGCProductItem key={cgcProduct.id} {...cgcProduct} />) }
+    // </div>
+// }
+
+// async function getCheongichoItems(req : Request, res : Response) {
+
+//   // -------- 구글 시트를 통해서 데이터를 가져옴 ---------- //
+
+
+//   // -------- DB를 통해서 데이터를 가져옴 ---------- //
+//   const db = new sqlite3.Database("./cheongicho.db");
+
+//   db.all("SELECT * FROM cgcItems", [], (err, rows) => {
+//     if (err) {
+//       console.log("error")
+//     }
+//     console.log("success")
+//     console.log(rows);
+//   });
+
+//   db.close();
+//   // -------- DB를 통해서 데이터를 가져옴 ---------- //
+}
+
+type Props = {
+  searchParams? : {
+    page? : string;
+  }
+}
+
+export default async function Home({searchParams} : Props) {
+  const page = Number(searchParams?.page || '1');
+  const size = 10;
+  const currentPage = Math.max(page, 1);
+
+  const cgcProducts = await AllCGCProducts(currentPage, size);
+
   return (
     <div className={style.container}>
       <section>
-        <h3>지금 추천하는 도서</h3>
-          <RecoBooks />
+        <h3>천기초 - 추천리스트</h3>
+          {/* <RecoBooks /> */}
       </section>
       <section>
-        <h3>등록된 모든 도서</h3>
-          <AllBooks />
+        <h3>천기초 - 제품리스트</h3>
+        {cgcProducts.map(cgcProduct => (
+          <CGCProductItem key={cgcProduct.id} {...cgcProduct} />)
+        )}
+          {/* <AllBooks /> */}
+          {/* <AllCGCProducts /> */}
+          <Pagination currentPage={currentPage} />
       </section>
     </div>
   );
