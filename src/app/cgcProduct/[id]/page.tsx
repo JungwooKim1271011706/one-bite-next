@@ -40,7 +40,7 @@ async function CGCProductDetail ({ cgcProductId } : {cgcProductId : string}) {
             {/* <Image src={imageA} width={240} height={300} alt={`제품 ${name} 입니다}`}/> */}
         </div>
         <div className={style.title}>{cgcProduct.name}</div>
-        <div className={style.subTitle}>{cgcProduct.expirationDate}</div>
+        <div className={style.subTitle}>유통기한 : {cgcProduct.expirationDate}</div>
         <div className={style.author}>권장 소매가 : {cgcProduct.suggestedRetailPrice}</div>
         <div className={style.author}>권장 도매가 : {cgcProduct.suggestedWholesalePrice}</div>
         <div className={style.author}>규격 : {cgcProduct.specification}</div>

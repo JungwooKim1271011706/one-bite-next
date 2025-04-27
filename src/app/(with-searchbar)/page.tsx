@@ -7,6 +7,7 @@ import sqlite3 from "sqlite3";
 import { json } from "stream/consumers";
 import { JWT } from "google-auth-library";
 import credential from "../cron/key.json";
+// import credential from "../cron/cgcProductkey.json";
 import { GoogleSpreadsheet } from "google-spreadsheet";
 import CGCProductItem from "@/components/cgcProduct-item";
 import Pagination from "@/components/pagiation";
@@ -82,6 +83,14 @@ export async function getGoogleSheet() : Promise<GoogleSpreadsheet> {
   return cacheDoc;
 }
 
+async function getCGCproductSize() {
+        cacheDoc = await getGoogleSheet();
+        const sheet = cacheDoc.sheetsByTitle["가격표"];
+        const totalCount = (await sheet.getRows()).length;
+        console.log(" >>> " + totalCount);
+        return totalCount;
+}
+
 async function getCGCproducts(page: number, size: number): Promise<CGCproduct[]> {
         cacheDoc = await getGoogleSheet();
         const sheet = cacheDoc.sheetsByTitle["가격표"];
@@ -115,30 +124,6 @@ async function getCGCproducts(page: number, size: number): Promise<CGCproduct[]>
 async function AllCGCProducts(page: number, size: number) {
     const cgcProducts = await getCGCproducts(page, size);
     return cgcProducts;
-
-    // return <div>
-    //   {cgcProducts.map((cgcProduct) => <CGCProductItem key={cgcProduct.id} {...cgcProduct} />) }
-    // </div>
-// }
-
-// async function getCheongichoItems(req : Request, res : Response) {
-
-//   // -------- 구글 시트를 통해서 데이터를 가져옴 ---------- //
-
-
-//   // -------- DB를 통해서 데이터를 가져옴 ---------- //
-//   const db = new sqlite3.Database("./cheongicho.db");
-
-//   db.all("SELECT * FROM cgcItems", [], (err, rows) => {
-//     if (err) {
-//       console.log("error")
-//     }
-//     console.log("success")
-//     console.log(rows);
-//   });
-
-//   db.close();
-//   // -------- DB를 통해서 데이터를 가져옴 ---------- //
 }
 
 type Props = {
@@ -153,11 +138,13 @@ export default async function Home({searchParams} : Props) {
   const currentPage = Math.max(page, 1);
 
   const cgcProducts = await AllCGCProducts(currentPage, size);
+  const cgcProductsCount = await getCGCproductSize();
 
   return (
     <div className={style.container}>
       <section>
         <h3>천기초 - 추천리스트</h3>
+        <div>추천리스트 추가 필요...(랜덤하게 특정 제품 노출)</div>
           {/* <RecoBooks /> */}
       </section>
       <section>
@@ -167,7 +154,7 @@ export default async function Home({searchParams} : Props) {
         )}
           {/* <AllBooks /> */}
           {/* <AllCGCProducts /> */}
-          <Pagination currentPage={currentPage} />
+          <Pagination currentPage={currentPage} totalPages={cgcProductsCount} groupSize={10}/>
       </section>
     </div>
   );

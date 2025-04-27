@@ -18,8 +18,8 @@ async function Footer() {
   const bookCount = books.length;
 
     return <footer>
-        <div>제작 @세상살기힘들어</div>
-        <div>{bookCount}개의 도서가 등록되어 있습니다.</div>
+        <div>COPYRIGHT(C) 2020 cheongicho. CO.LTD ALL RIGHT RESERVED.</div>
+        {/* <div>{bookCount}개의 도서가 등록되어 있습니다.</div> */}
       </footer>;
 }
 
@@ -37,7 +37,7 @@ export default function RootLayout({
       <body>
         <div className={style.container}>
           <header>
-            <Link href={"/"}>📚 ONEBITE BOOKS</Link>
+            <Link href={"/"}>📚 천기초 제품리스트(베타버전 V0.1)</Link>
           </header>
           <main>{children}</main> 
           <Footer />
