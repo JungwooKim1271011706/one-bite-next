@@ -1,55 +1,69 @@
-import { GoogleSpreadsheet } from 'google-spreadsheet';
+import { GoogleSpreadsheet, GoogleSpreadsheetWorksheet } from 'google-spreadsheet';
 import { JWT } from "google-auth-library";
-import credential from "../cron/key.json";
-import { CGCproduct } from '@/types';
-import CGCProductItem from '@/components/cgcProduct-item';
+// import credential from "../cron/key.json";
+import credential from "../cron/cgcProductKey.json";
+import sheetcredential from "../cron/(org)cgcProductKey.json";
+import path from 'path';
+import { google } from 'googleapis';
+import { file } from 'googleapis/build/src/apis/file';
 
-const docId = "1Rq43xTMCat5JpWe_61SBRqpn5lr7BYJ26Weoaqc-U1Q";
-const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
-const jwt = new JWT ({
-    email: credential.client_email,
-    key: credential.private_key,
-    scopes: SCOPES,
-});
+/**
+ * 천기초의 제품 전체 데이터를 가져온다.
+ */
+// const docId = "1Rq43xTMCat5JpWe_61SBRqpn5lr7BYJ26Weoaqc-U1Q"; // 테스트
+const docId = "1GIgf9TwfctMrK43Qu0NmI_i0ikOzn7cuPwh--lCgbXQ"; // real
+const SCOPES = ["https://www.googleapis.com/auth/drive.readonly", "https://www.googleapis.com/auth/spreadsheets"];
+let jwtClient: JWT | null = null;
+let cacheDoc: GoogleSpreadsheet | null = null;
 
+const KEY_FILE_PATH = path.join(process.cwd(), "src", "app", "cron", "cgcProductKey.json");
 
-export async function getCGCproducts(): Promise<CGCproduct[]> {
-        const doc = new GoogleSpreadsheet(docId, jwt);
-        await doc.loadInfo();
-        const sheet = doc.sheetsByTitle["가격표"];
-        const rows = await sheet.getRows();
-
-        const cgcProduct: CGCproduct[] = rows.map((row) => {
-            const itemData = row.toObject();
-
-            return {
-                id: Number(itemData['ID']),
-                name: itemData['품 명'],
-                expirationDate: itemData['유통 기한'],
-                expirationDateNewLot: itemData['유통 기한 2 (NEW LOG)'],
-                suggestedRetailPrice: itemData['권장 소매가'],
-                suggestedWholesalePrice: itemData['권장 도매가'],
-                specification: itemData['규 격'],
-                category: itemData['구 분'],
-                type: itemData['항 목'],
-                itemFeatures: itemData['제품 특징'],
-                imageA: itemData['사진A'],
-                imageB: itemData['사진B'],
-            }
-        });
-
-        return cgcProduct;
+export async function getDriverImageUrl(fileName: string): Promise<string> {
+  const auth = new google.auth.GoogleAuth({
+      keyFile: KEY_FILE_PATH,
+      scopes: SCOPES,
+  })
+  const drive = google.drive({ version: "v3", auth});
+  const res = await drive.files.list({
+    q: `name = '${fileName}' and trashed = false`,
+    fields: "files(id, name, thumbnailLink)",
+  });
+  const files = res.data.files;
+  if (!files || files.length === 0) {
+    return '';
+  }
+  const thumbnailLink = files[0].thumbnailLink;
+  if (!thumbnailLink) {
+    return '';
+  }
+  return thumbnailLink;
 }
 
+/**
+ * 키 파일에 대해서 수정 필요
+ * @param sheetTitle 
+ * @returns 
+ */
+export async function getGoogleSheet(sheetTitle : string) : Promise<GoogleSpreadsheetWorksheet> {
+  if (!jwtClient) {
+    jwtClient = new JWT ({
+        email: sheetcredential.client_email,
+        key: sheetcredential.private_key,
+        scopes: SCOPES,
+    });
+  }
 
-export default async function page() {
-    const cgcProducts = await getCGCproducts();
-    return (
-        <div>
-            <h1> 아이템 목록 </h1>
-            {cgcProducts.map((item) => (
-                <CGCProductItem key={item.id} {...item} />
-            ))}
-        </div>
-    );
+  if (!cacheDoc) {
+    const doc = new GoogleSpreadsheet(docId, jwtClient);
+    await doc.loadInfo();
+    cacheDoc = doc;
+  }
+
+  return cacheDoc.sheetsByTitle[sheetTitle];
+}
+
+export async function getCGCproductSize() {
+    const sheet = await getGoogleSheet("가격표");
+    const totalCount = (await sheet.getRows()).length;
+    return totalCount;
 }

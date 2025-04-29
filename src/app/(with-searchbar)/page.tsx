@@ -8,9 +8,11 @@ import { json } from "stream/consumers";
 import { JWT } from "google-auth-library";
 import credential from "../cron/key.json";
 // import credential from "../cron/cgcProductkey.json";
-import { GoogleSpreadsheet } from "google-spreadsheet";
+import { GoogleSpreadsheet, GoogleSpreadsheetWorksheet } from "google-spreadsheet";
 import CGCProductItem from "@/components/cgcProduct-item";
 import Pagination from "@/components/pagiation";
+import { getDriverImageUrl, getGoogleSheet } from "../api/page";
+import path from "path";
 
 // 특정 페이지의 유형을 강제로 Static, Dynamic 페이지로 설정
 // 1. auto : 기본값, 아무것도 강제하지 않음.
@@ -18,15 +20,15 @@ import Pagination from "@/components/pagiation";
 // 3. force-static : 페이지를 강제로 static으로 설정
 // 4. error : 페이지를 강제로 Static 페이지로 설정 (설정하면 안되는 이유 -> 빌드 오류 발생)
 
-export const metadata : Metadata = {
-  title : "한입 북스",
-  description : "한입 북스에 등록된 도서를 만나보세요",
-  openGraph : {
-    title : "한입 북스",
-    description : "한입 북스에 등록된 도서를 만나보세요",
-    images : ['/thumbnail.png'],
-  }
-};
+// export const metadata : Metadata = {
+//   title : "한입 북스",
+//   description : "한입 북스에 등록된 도서를 만나보세요",
+//   openGraph : {
+//     title : "한입 북스",
+//     description : "한입 북스에 등록된 도서를 만나보세요",
+//     images : ['/thumbnail.png'],
+//   }
+// };
 
 async function AllBooks() {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`,
@@ -57,50 +59,39 @@ async function RecoBooks() {
   </div>
 }
 
-/**
- * 천기초의 제품 전체 데이터를 가져온다.
- */
-
-const docId = "1Rq43xTMCat5JpWe_61SBRqpn5lr7BYJ26Weoaqc-U1Q";
-const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
-let jwtClient: JWT | null = null;
-let cacheDoc: GoogleSpreadsheet | null = null;
-
-export async function getGoogleSheet() : Promise<GoogleSpreadsheet> {
-  if (!jwtClient) {
-    jwtClient = new JWT ({
-        email: credential.client_email,
-        key: credential.private_key,
-        scopes: SCOPES,
-    });
-  }
-
-  if (!cacheDoc) {
-    const doc = new GoogleSpreadsheet(docId, jwtClient);
-    await doc.loadInfo();
-    cacheDoc = doc;
-  }
-  return cacheDoc;
-}
-
 async function getCGCproductSize() {
-        cacheDoc = await getGoogleSheet();
-        const sheet = cacheDoc.sheetsByTitle["가격표"];
+        const sheet = await getGoogleSheet("가격표");
         const totalCount = (await sheet.getRows()).length;
-        console.log(" >>> " + totalCount);
         return totalCount;
 }
 
 async function getCGCproducts(page: number, size: number): Promise<CGCproduct[]> {
-        cacheDoc = await getGoogleSheet();
-        const sheet = cacheDoc.sheetsByTitle["가격표"];
+        const sheet = await getGoogleSheet("가격표");
         const rows = await sheet.getRows({
           offset: (page -1) * size,
           limit: size
         });
 
-        const cgcProduct: CGCproduct[] = rows.map((row) => {
+        const getImageUrls = async (imageA: string, imageB: string) => {
+          let imageAUrl = '';
+          let imageBUrl = '';
+          const seperator = '가격표_Images/';
+          if (imageA && imageA.length > 0) {
+            imageA = imageA.substring(seperator.length);
+            imageAUrl = await getDriverImageUrl(imageA);
+          }
+          if (imageB && imageB.length > 0) {
+            imageB = imageB.substring(seperator.length);
+            imageBUrl = await getDriverImageUrl(imageB);
+          }
+          return {imageAUrl, imageBUrl};
+        };
+
+        const cgcProduct: CGCproduct[] = await Promise.all(rows.map(async (row) => {
             const itemData = row.toObject();
+
+            // console.log(itemData['사진 A']);
+            const { imageAUrl, imageBUrl } = await getImageUrls(itemData['사진 A'], itemData['사진 B']);
 
             return {
                 id: Number(itemData['ID']),
@@ -113,10 +104,10 @@ async function getCGCproducts(page: number, size: number): Promise<CGCproduct[]>
                 category: itemData['구 분'],
                 type: itemData['항 목'],
                 itemFeatures: itemData['제품 특징'],
-                imageA: itemData['사진A'],
-                imageB: itemData['사진B'],
+                imageA: imageAUrl,
+                imageB: imageBUrl,
             }
-        });
+        }));
 
         return cgcProduct;
 }
@@ -154,7 +145,7 @@ export default async function Home({searchParams} : Props) {
         )}
           {/* <AllBooks /> */}
           {/* <AllCGCProducts /> */}
-          <Pagination currentPage={currentPage} totalPages={cgcProductsCount} groupSize={10}/>
+          <Pagination currentPage={currentPage} totalCount={cgcProductsCount} groupSize={10} searchQuery=""/>
       </section>
     </div>
   );

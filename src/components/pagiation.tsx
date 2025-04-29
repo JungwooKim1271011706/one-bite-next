@@ -1,55 +1,60 @@
+'use client'
+
+import next from "next";
+
 type Props = {
     currentPage: number;
-    totalPages?: number;
+    totalCount?: number;
     groupSize: number;
+    searchQuery : string;
 }
 
-export default function Pagination({ currentPage, totalPages = 1, groupSize } : Props) {
+export default function Pagination({ currentPage, totalCount = 1, groupSize, searchQuery = ''} : Props) {
     const currentGroup = Math.floor((currentPage - 1) / groupSize);
-    const startPage = currentGroup * groupSize - 1;
-    const endPage = Math.min(startPage + groupSize - 1, totalPages);
+    const startPage = currentGroup * groupSize + 1;
+    const totalPage = Math.ceil(totalCount / groupSize);
+    const endPage = Math.min(startPage + groupSize - 1, totalPage);
 
-    const prevGroupPage = Math.max(startPage - groupSize - 1);
-    const nextGroupPage = Math.max(startPage + groupSize, totalPages);
+    const prevGroupPage = startPage -1;
+    const nextGroupPage = endPage + 1;
+
 
     return (
-        <div style={{ marginTop : '2rem'}}>
+        <div style={{ 
+            marginTop : '2rem',
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-evenly",
+            }}>
             {/* 가장 첫번쨰 페이지로 이동 */}
-            {
+            {(
                 <a
-                    href={'?page=1'}
+                    href={`?q=${searchQuery}&page=1`}
                     style={{
-                        padding: '4px 8px',
+                        padding: '2px 4px',
                         fontWeight: 'bold',
-                    }}
-                >
-                    &laquo;
-                </a>
-            }
-            {/* 이전 그룹으로 이동 
-                첫번째 페이지라고 하면 그냥 1
-                그게 아니라고 하면 이전 페이지를 누르면 됌...
-            */}
-            {startPage > 1 && (
+                        color: "blue"
+                    }}>
+                {`<<`}</a>
+            )}
+            {/* 이전 그룹으로 이동 */}
+            {(
                 <a 
-                    href={`?page=${prevGroupPage}&size=${groupSize}`}
+                    href={`?q=${searchQuery}&page=${prevGroupPage}`}
                     style={{
-                            padding: '4px 8px',
-                            fontWeight: 'bold',
+                            padding: '0px 8px 0px 3px',
                     }}
                 >&lt;</a>
 
-            )
-            }
-
+            )}
+            {/* 페이지 */}
             {Array.from({ length: endPage - startPage + 1}, (_, i) => {
-                const page = i + 1;
+                const page = startPage + i;
                 const isActive = page === currentPage;
-
                 return (
                     <a
                     key={page}
-                    href={`?page=${page}`}
+                    href={`?q=${searchQuery}&page=${page}`}
                     style = {{
                         marginRight: '8px',
                         fontWeight: isActive ? 'bold': 'normal',
@@ -60,23 +65,21 @@ export default function Pagination({ currentPage, totalPages = 1, groupSize } : 
                     </a>
                 )
             })}
-
-
-
         {/* 다음 그룹으로 이동 */}
+        {endPage < totalPage && (
+            <a href={`?q=${searchQuery}&page=${nextGroupPage}`}>{`>`}</a>
+        )}
 
         {/* 가장 마지막 페이지로 이동 */}
-        {
+        {currentPage < totalPage && (
             <a
-                href={`?page=${endPage}`}
+                href={`?page=${totalPage}`}
                 style={{
-                    padding: '4px 8px',
+                    padding: '0px 0px 0px 6px',
                     fontWeight: 'bold',
-                }}
-            >
-                &raquo;
-            </a>
-        }
+                    color: "blue"
+            }}>{`>>`}</a>
+        )}
         </div>
     );
 
