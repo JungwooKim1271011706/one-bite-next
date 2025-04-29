@@ -20,8 +20,11 @@ export default function Searchbar() {
   };
 
   const onSubmit = () => {
-    if (!search || q === search) return;
-    router.push(`/search?q=${search}`);
+    if (!search || q === search) {
+      router.push(`/`);
+      return;
+    } 
+    router.push(`/search?q=${search}&page=1`);
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

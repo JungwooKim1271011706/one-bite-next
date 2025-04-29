@@ -8,6 +8,8 @@ const nextConfig = {
     images : {
         domains : [
             'shopping-phinf.pstatic.net',
+            'drive.google.com',
+            'lh3.googleusercontent.com'
         ]
     }
 };
