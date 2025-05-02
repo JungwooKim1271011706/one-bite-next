@@ -22,3 +22,20 @@
   padding: 100px 0px;
   color: gray;
 }
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header > button {
+  width: 70px;
+  border-radius: 5px;
+  border: none;
+  /* background-color: rgb(37, 147, 255); */
+  background-color: gray;
+  color: white;
+  cursor: pointer;
+}

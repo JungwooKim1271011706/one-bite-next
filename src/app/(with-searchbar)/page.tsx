@@ -13,6 +13,7 @@ import CGCProductItem from "@/components/cgcProduct-item";
 import Pagination from "@/components/pagiation";
 import { getDriverImageUrl, getGoogleSheet } from "../api/page";
 import path from "path";
+import { headers } from "next/headers";
 
 // 특정 페이지의 유형을 강제로 Static, Dynamic 페이지로 설정
 // 1. auto : 기본값, 아무것도 강제하지 않음.
@@ -123,8 +124,11 @@ type Props = {
   }
 }
 
-export default async function Home({searchParams} : Props) {
-  const page = Number(searchParams?.page || '1');
+export default async function Home() {
+  const headerList = headers();
+  const url = (await headerList).get('x-next-url') || '';
+  const searchParams = new URLSearchParams(url.split('?')[1]);
+  const page = Number(searchParams.get('page') || '1');
   const size = 10;
   const currentPage = Math.max(page, 1);
 

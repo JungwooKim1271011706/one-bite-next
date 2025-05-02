@@ -64,14 +64,17 @@ async function CGCProductDetail ({ cgcProductId } : {cgcProductId : string}) {
     );
 }
 
-export default function Page({
+export default async function Page({
     params,
 } : {
     params : { id: string}; // params에서 id를 꺼내서 가져와야 함..
 }) {
+
+    const id = params.id;
+
     return (
         <div className={style.container}>
-            <CGCProductDetail cgcProductId={params.id} />
+            <CGCProductDetail cgcProductId={id} />
         </div>
     )
 }

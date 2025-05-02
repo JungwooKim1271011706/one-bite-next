@@ -3,6 +3,7 @@ import Link from "next/link";
 import style from "./layout.module.css";
 import { BookData } from "@/types";
 import { ReactNode } from "react";
+import LogoutButton from "@/components/logout";
 
 async function Footer() {
   const response = await fetch(
@@ -36,8 +37,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <div className={style.container}>
-          <header>
+          <header className={style.header}>
             <Link href={"/"}>📚 천기초 제품리스트(베타버전 V0.1)</Link>
+            <LogoutButton/>
           </header>
           <main>{children}</main> 
           <Footer />
