@@ -1,26 +1,12 @@
 import "./globals.css";
 import Link from "next/link";
 import style from "./layout.module.css";
-import { BookData } from "@/types";
 import { ReactNode } from "react";
 import LogoutButton from "@/components/logout";
 
 async function Footer() {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`,
-    {cache : "force-cache"}
-  );
-
-  if (!response.ok) {
-    return <footer>제작 @세상살기힘들어</footer>;
-  }
-
-  const books : BookData[] = await response.json();
-  const bookCount = books.length;
-
     return <footer>
         <div>COPYRIGHT(C) 2020 cheongicho. CO.LTD ALL RIGHT RESERVED.</div>
-        {/* <div>{bookCount}개의 도서가 등록되어 있습니다.</div> */}
       </footer>;
 }
 
