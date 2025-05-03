@@ -6,8 +6,6 @@ import { Metadata } from "next";
 import sqlite3 from "sqlite3";
 import { json } from "stream/consumers";
 import { JWT } from "google-auth-library";
-import credential from "../cron/key.json";
-// import credential from "../cron/cgcProductkey.json";
 import { GoogleSpreadsheet, GoogleSpreadsheetWorksheet } from "google-spreadsheet";
 import CGCProductItem from "@/components/cgcProduct-item";
 import Pagination from "@/components/pagiation";
