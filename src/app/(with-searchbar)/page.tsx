@@ -30,35 +30,6 @@ import { headers } from "next/headers";
 //   }
 // };
 
-async function AllBooks() {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`,
-    {cache: "force-cache"}
-  );
-  if (!response.ok) {
-    return <div>오류가 발생했습니다 ...</div>;
-  }
-  const allBooks : BookData[] = await response.json();
-
-  return <div>
-    {allBooks.map((book) => (<BookItem key={book.id} {...book} />))}
-  </div>
-}
-
-async function RecoBooks() {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/random`, 
-    // {cache : "force-cache"} 무조건적인 캐싱
-    {next : { revalidate : 3}} // 시간단위로 캐싱
-  );
-  if (!response.ok) {
-    return <div>오류가 발생했습니다 ...</div>;
-  }
-  const recoBooks : BookData[] = await response.json();
-
-  return <div>
-    {recoBooks.map((book) => (<BookItem key={book.id} {...book} />)) }
-  </div>
-}
-
 async function getCGCproductSize() {
         const sheet = await getGoogleSheet("가격표");
         const totalCount = (await sheet.getRows()).length;

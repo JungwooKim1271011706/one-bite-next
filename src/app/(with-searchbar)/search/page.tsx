@@ -7,7 +7,6 @@ import CGCProductItem from "@/components/cgcProduct-item";
 import Pagination from "@/components/pagiation";
 import { getDriverImageUrl } from "@/util/driver-utils";
 import { getGoogleSheet } from "@/util/driver-utils";
-import { metadata } from "../page_org";
 import { headers } from "next/headers";
 
 async function SearchResult({q, page} : {q : string; page : number}) {
