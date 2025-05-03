@@ -6,6 +6,7 @@ import { Suspense, useEffect, useState } from "react";
 import CGCProductItem from "@/components/cgcProduct-item";
 import Pagination from "@/components/pagiation";
 import { getDriverImageUrl, getGoogleSheet } from "@/app/api/page";
+import { metadata } from "../page_org";
 
 async function SearchResult({q, page} : {q : string; page : number}) {
   const size = 10;
@@ -59,8 +60,8 @@ async function SearchResult({q, page} : {q : string; page : number}) {
 
   return (
     <div>
-      {cgcProducts.map((item) => (
-        <CGCProductItem key={item.id} {...item} />
+      {cgcProducts.map((item, index) => (
+        <CGCProductItem key={index} {...item} />
       ))}
 
       <Pagination currentPage={page} totalCount={totalCount} groupSize={10} searchQuery={q}/>
@@ -68,25 +69,30 @@ async function SearchResult({q, page} : {q : string; page : number}) {
   );
 }
 
+// type Props = {
+//   searchParams : {
+//     q? : string,
+//     page? : number};
+// }
 type Props = {
-  searchParams : {
-    q? : string,
-    page? : number};
-}
+  searchParams: Promise<{ q?: string; page?: string }>;
+};
 
-export function generateMetadata({searchParams} : Props) : Metadata {
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const { q = "" } = await searchParams;
+
   return {
-    title : `${searchParams.q} : 천기초 제품 검색`,
-    description : `${searchParams.q} 검색 결과입니다`,
-    openGraph : {
-      title : `${searchParams.q} : 천기초 제품 검색`,
-      description : `${searchParams.q} 검색 결과입니다`,
-      images : ['/thumbnail.png'],
-    }
-  }
+    title: `${q} : 천기초 제품 검색`,
+    description: `${q} 검색 결과입니다`,
+    openGraph: {
+      title: `${q} : 천기초 제품 검색`,
+      description: `${q} 검색 결과입니다`,
+      images: ["/thumbnail.png"],
+    },
+  };
 }
 
-export default function Page({
+export default async function Page({
   searchParams,
 }: {
   searchParams: {
@@ -94,11 +100,13 @@ export default function Page({
     page?: number;
   };
 }) {
+  const { q = "", page = "1"} = await searchParams;
+  const pageNumber = Number(page) || 1;
   return (
   <Suspense 
-    key={searchParams.q || ""} 
+    key={q} 
     fallback={<BookListSkeleton count={5} />}>
-      <SearchResult q={searchParams.q || ""} page={searchParams.page || 1} />
+      <SearchResult q={q} page={pageNumber} />
   </Suspense>
   );
 }

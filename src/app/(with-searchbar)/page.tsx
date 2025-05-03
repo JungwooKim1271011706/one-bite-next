@@ -90,8 +90,6 @@ async function getCGCproducts(page: number, size: number): Promise<CGCproduct[]>
 
         const cgcProduct: CGCproduct[] = await Promise.all(rows.map(async (row) => {
             const itemData = row.toObject();
-
-            // console.log(itemData['사진 A']);
             const { imageAUrl, imageBUrl } = await getImageUrls(itemData['사진 A'], itemData['사진 B']);
 
             return {
@@ -119,16 +117,14 @@ async function AllCGCProducts(page: number, size: number) {
 }
 
 type Props = {
-  searchParams? : {
+  searchParams? : Promise<{
     page? : string;
-  }
+  }>;
 }
 
-export default async function Home() {
-  const headerList = headers();
-  const url = (await headerList).get('x-next-url') || '';
-  const searchParams = new URLSearchParams(url.split('?')[1]);
-  const page = Number(searchParams.get('page') || '1');
+export default async function Home( { searchParams } : Props) {
+  const params = await searchParams;
+  const page = Number(params?.page || '1');
   const size = 10;
   const currentPage = Math.max(page, 1);
 
@@ -144,8 +140,8 @@ export default async function Home() {
       </section>
       <section>
         <h3>천기초 - 제품리스트</h3>
-        {cgcProducts.map(cgcProduct => (
-          <CGCProductItem key={cgcProduct.id} {...cgcProduct} />)
+        {cgcProducts.map((cgcProduct, index) => (
+          <CGCProductItem key={index} {...cgcProduct} />)
         )}
           {/* <AllBooks /> */}
           {/* <AllCGCProducts /> */}
