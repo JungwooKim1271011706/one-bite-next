@@ -34,36 +34,3 @@ import { file } from 'googleapis/build/src/apis/file';
 //   }
 //   return thumbnailLink;
 // }
-
-let jwtClient: JWT | null = null;
-const SCOPES = ["https://www.googleapis.com/auth/drive.readonly", "https://www.googleapis.com/auth/spreadsheets"];
-let cacheDoc: GoogleSpreadsheet | null = null;
-const docId = "1Rq43xTMCat5JpWe_61SBRqpn5lr7BYJ26Weoaqc-U1Q"; // 테스트
-/**
- * 키 파일에 대해서 수정 필요
- * @param sheetTitle 
- * @returns 
- */
-export async function getGoogleSheet(sheetTitle : string) : Promise<GoogleSpreadsheetWorksheet> {
-  if (!jwtClient) {
-    jwtClient = new JWT ({
-        email: sheetcredential.client_email,
-        key: sheetcredential.private_key,
-        scopes: SCOPES,
-    });
-  }
-
-  if (!cacheDoc) {
-    const doc = new GoogleSpreadsheet(docId, jwtClient);
-    await doc.loadInfo();
-    cacheDoc = doc;
-  }
-
-  return cacheDoc.sheetsByTitle[sheetTitle];
-}
-
-export async function getCGCproductSize() {
-    const sheet = await getGoogleSheet("가격표");
-    const totalCount = (await sheet.getRows()).length;
-    return totalCount;
-}

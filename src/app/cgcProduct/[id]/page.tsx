@@ -3,7 +3,7 @@ import Image from "next/image";
 import { CGCproduct } from "@/types";
 import { notFound } from "next/navigation";
 import { getDriverImageUrl } from "@/util/driver-utils";
-import { getGoogleSheet } from "@/app/api/page";
+import { getGoogleSheet } from "@/util/driver-utils";
 
 async function CGCProductDetail ({ cgcProductId } : {cgcProductId : string}) {
     const sheet = await getGoogleSheet("가격표");

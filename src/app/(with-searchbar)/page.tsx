@@ -12,7 +12,7 @@ import { GoogleSpreadsheet, GoogleSpreadsheetWorksheet } from "google-spreadshee
 import CGCProductItem from "@/components/cgcProduct-item";
 import Pagination from "@/components/pagiation";
 import { getDriverImageUrl } from "@/util/driver-utils";
-import { getGoogleSheet } from "../api/page";
+import { getGoogleSheet } from "@/util/driver-utils";
 import path from "path";
 import { headers } from "next/headers";
 
