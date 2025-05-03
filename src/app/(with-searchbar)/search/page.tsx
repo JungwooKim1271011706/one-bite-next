@@ -5,7 +5,8 @@ import { Metadata } from "next";
 import { Suspense, useEffect, useState } from "react";
 import CGCProductItem from "@/components/cgcProduct-item";
 import Pagination from "@/components/pagiation";
-import { getDriverImageUrl, getGoogleSheet } from "@/app/api/page";
+import { getDriverImageUrl } from "@/util/driver-utils";
+import { getGoogleSheet } from "@/app/api/page";
 import { metadata } from "../page_org";
 import { headers } from "next/headers";
 

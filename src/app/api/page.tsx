@@ -10,35 +10,35 @@ import { file } from 'googleapis/build/src/apis/file';
 /**
  * 천기초의 제품 전체 데이터를 가져온다.
  */
-// const docId = "1Rq43xTMCat5JpWe_61SBRqpn5lr7BYJ26Weoaqc-U1Q"; // 테스트
-const docId = "1GIgf9TwfctMrK43Qu0NmI_i0ikOzn7cuPwh--lCgbXQ"; // real
-const SCOPES = ["https://www.googleapis.com/auth/drive.readonly", "https://www.googleapis.com/auth/spreadsheets"];
+// const docId = "1GIgf9TwfctMrK43Qu0NmI_i0ikOzn7cuPwh--lCgbXQ"; // real
+
+// const KEY_FILE_PATH = path.join(process.cwd(), "src", "app", "cron", "cgcProductKey.json");
+
+// export async function getDriverImageUrl(fileName: string): Promise<string> {
+//   const auth = new google.auth.GoogleAuth({
+//       keyFile: KEY_FILE_PATH,
+//       scopes: SCOPES,
+//   })
+//   const drive = google.drive({ version: "v3", auth});
+//   const res = await drive.files.list({
+//     q: `name = '${fileName}' and trashed = false`,
+//     fields: "files(id, name, thumbnailLink)",
+//   });
+//   const files = res.data.files;
+//   if (!files || files.length === 0) {
+//     return '';
+//   }
+//   const thumbnailLink = files[0].thumbnailLink;
+//   if (!thumbnailLink) {
+//     return '';
+//   }
+//   return thumbnailLink;
+// }
+
 let jwtClient: JWT | null = null;
+const SCOPES = ["https://www.googleapis.com/auth/drive.readonly", "https://www.googleapis.com/auth/spreadsheets"];
 let cacheDoc: GoogleSpreadsheet | null = null;
-
-const KEY_FILE_PATH = path.join(process.cwd(), "src", "app", "cron", "cgcProductKey.json");
-
-export async function getDriverImageUrl(fileName: string): Promise<string> {
-  const auth = new google.auth.GoogleAuth({
-      keyFile: KEY_FILE_PATH,
-      scopes: SCOPES,
-  })
-  const drive = google.drive({ version: "v3", auth});
-  const res = await drive.files.list({
-    q: `name = '${fileName}' and trashed = false`,
-    fields: "files(id, name, thumbnailLink)",
-  });
-  const files = res.data.files;
-  if (!files || files.length === 0) {
-    return '';
-  }
-  const thumbnailLink = files[0].thumbnailLink;
-  if (!thumbnailLink) {
-    return '';
-  }
-  return thumbnailLink;
-}
-
+const docId = "1Rq43xTMCat5JpWe_61SBRqpn5lr7BYJ26Weoaqc-U1Q"; // 테스트
 /**
  * 키 파일에 대해서 수정 필요
  * @param sheetTitle 

@@ -11,7 +11,8 @@ import credential from "../cron/key.json";
 import { GoogleSpreadsheet, GoogleSpreadsheetWorksheet } from "google-spreadsheet";
 import CGCProductItem from "@/components/cgcProduct-item";
 import Pagination from "@/components/pagiation";
-import { getDriverImageUrl, getGoogleSheet } from "../api/page";
+import { getDriverImageUrl } from "@/util/driver-utils";
+import { getGoogleSheet } from "../api/page";
 import path from "path";
 import { headers } from "next/headers";
 
