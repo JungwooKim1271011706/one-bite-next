@@ -7,6 +7,7 @@ import CGCProductItem from "@/components/cgcProduct-item";
 import Pagination from "@/components/pagiation";
 import { getDriverImageUrl, getGoogleSheet } from "@/app/api/page";
 import { metadata } from "../page_org";
+import { headers } from "next/headers";
 
 async function SearchResult({q, page} : {q : string; page : number}) {
   const size = 10;
@@ -69,18 +70,18 @@ async function SearchResult({q, page} : {q : string; page : number}) {
   );
 }
 
-// type Props = {
-//   searchParams : {
-//     q? : string,
-//     page? : number};
-// }
 type Props = {
-  searchParams: Promise<{ q?: string; page?: string }>;
-};
+  searchParams : Promise<{
+    q? : string,
+    page? : number}>;
+}
+// type Props = {
+//   searchParams: URLSearchParams;
+// };
 
-export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+// export async function generateMetadata({ searchParams }:{searchParams : { q? : string}}): Promise<Metadata> {
+export async function generateMetadata({ searchParams} : Props): Promise<Metadata> {
   const { q = "" } = await searchParams;
-
   return {
     title: `${q} : 천기초 제품 검색`,
     description: `${q} 검색 결과입니다`,
@@ -94,14 +95,10 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 
 export default async function Page({
   searchParams,
-}: {
-  searchParams: {
-    q?: string;
-    page?: number;
-  };
-}) {
-  const { q = "", page = "1"} = await searchParams;
-  const pageNumber = Number(page) || 1;
+}: Props
+) {
+  const { q = "", page = "1" } = await searchParams;
+  const pageNumber = Number(page);
   return (
   <Suspense 
     key={q} 
