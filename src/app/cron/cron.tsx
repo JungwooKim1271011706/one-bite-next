@@ -1,9 +1,6 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import cron from 'node-cron';
-import google from 'googleapis';
 import { GoogleSpreadsheet } from 'google-spreadsheet';
 import { JWT } from "google-auth-library";
-import credential from "./key.json";
 
 /**
  * 필요 변수 선언
