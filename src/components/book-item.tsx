@@ -13,7 +13,8 @@ export default function BookItem({
   coverImgUrl,
 }: BookData) {
   return (
-    <Link href={`/book/${id}`} className={style.container}>
+    // <Link href={`/book/${id}`} className={style.container}>
+    <Link href={`/book/0`} className={style.container}>
       <Image src={coverImgUrl} width={80} height={105} alt={`도서 ${title}의 표지 이미지)`} />
       <div>
         <div className={style.title}>{title}</div>
