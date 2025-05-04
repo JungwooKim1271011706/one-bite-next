@@ -31,10 +31,6 @@ export async function getDriverImageUrl(fileName: string): Promise<string> {
   return thumbnailLink;
 }
 
-// let jwtClient: JWT | null = null;
-// const SCOPES = ["https://www.googleapis.com/auth/drive.readonly", "https://www.googleapis.com/auth/spreadsheets"];
-// let cacheDoc: GoogleSpreadsheet | null = null;
-// const docId = "1Rq43xTMCat5JpWe_61SBRqpn5lr7BYJ26Weoaqc-U1Q"; // 테스트
 /**
  * 키 파일에 대해서 수정 필요
  * @param sheetTitle 
