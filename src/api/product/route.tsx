@@ -1,11 +1,11 @@
 // app/api/product/route.ts
-import { connectToDatabase } from "@/lib/mongodb";
-import Product from "@/models/CgcProduct";
+import { connecttodatabase } from "@/lib/mongodb";
+import CGCProduct from "@/models/CgcProduct";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  await connectToDatabase();
+  await connecttodatabase();
 
-  const products = await Product.find().lean();
-  return NextResponse.json(products);
+  const CGCproducts = await CGCProduct.find().lean();
+  return NextResponse.json(CGCproducts);
 }
