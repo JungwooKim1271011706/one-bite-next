@@ -3,7 +3,7 @@ import CGCProduct from "@/models/CgcProduct";
 import { getDriverImageUrl, getGoogleSheet } from "@/util/driver-utils";
 
 export async function syncCgcProducts() {
-    console.log("배치 작업 수행...");
+    console.log("🔄 스케줄러: CGCProduct 동기화 시작...");
 
     /**
      * 1. 구글시트에서 데이터 조회
@@ -80,5 +80,5 @@ export async function syncCgcProducts() {
         }
     }
 
-    console.log("배치 작업 종료...");
+    console.log("✅ 스케줄러: CGCProduct 동기화 완료!");
 }
