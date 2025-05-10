@@ -111,7 +111,7 @@ export default async function Page({
         )}
           {/* <AllBooks /> */}
           {/* <AllCGCProducts /> */}
-          <Pagination currentPage={pageNumber} totalCount={cgcProductsCount} groupSize={size} searchQuery=""/>
+          <Pagination currentPage={pageNumber} totalCount={cgcProductsCount} groupSize={size} searchQuery={q}/>
       {/* <SearchResult q={q} page={pageNumber} /> */}
   </Suspense>
   );
