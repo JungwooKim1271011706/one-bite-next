@@ -1,5 +1,5 @@
 // app/api/product/route.ts
-import { connecttodatabase } from "@/lib/mongodb";
+import { connecttodatabase } from "@/lib/db/mongodb";
 import CGCProduct from "@/models/CgcProduct";
 import { NextResponse } from "next/server";
 
