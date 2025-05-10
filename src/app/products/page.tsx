@@ -2,7 +2,7 @@
 
 import CGCProductItem from "@/components/cgcProduct-item";
 import Pagination from "@/components/pagiation";
-import { connecttodatabase } from "@/lib/mongodb";
+import { connecttodatabase } from "@/lib/db/mongodb"
 import CGCProduct from "@/models/CgcProduct";
 import { CGCproduct } from "@/types";
 

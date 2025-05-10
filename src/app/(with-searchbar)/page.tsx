@@ -13,6 +13,9 @@ import { getDriverImageUrl } from "@/util/driver-utils";
 import { getGoogleSheet } from "@/util/driver-utils";
 import path from "path";
 import { headers } from "next/headers";
+import { connecttodatabase } from "@/lib/db/mongodb"
+import CGCProduct from "@/models/CgcProduct";
+import { getCGCProducts } from "@/lib/service/CGCProductService";
 
 // 특정 페이지의 유형을 강제로 Static, Dynamic 페이지로 설정
 // 1. auto : 기본값, 아무것도 강제하지 않음.
@@ -81,11 +84,6 @@ async function getCGCproducts(page: number, size: number): Promise<CGCproduct[]>
         return cgcProduct;
 }
 
-async function AllCGCProducts(page: number, size: number) {
-    const cgcProducts = await getCGCproducts(page, size);
-    return cgcProducts;
-}
-
 type Props = {
   searchParams? : Promise<{
     page? : string;
@@ -98,8 +96,9 @@ export default async function Home( { searchParams } : Props) {
   const size = 10;
   const currentPage = Math.max(page, 1);
 
-  const cgcProducts = await AllCGCProducts(currentPage, size);
-  const cgcProductsCount = await getCGCproductSize();
+  // const cgcProducts = await AllCGCProducts(currentPage, size);
+  // const cgcProductsCount = await getCGCproductSize();
+  const {cgcProducts, cgcProductsCount } = await getCGCProducts(page, size);
 
   return (
     <div className={style.container}>
@@ -110,8 +109,8 @@ export default async function Home( { searchParams } : Props) {
       </section>
       <section>
         <h3>천기초 - 제품리스트</h3>
-        {cgcProducts.map((cgcProduct, index) => (
-          <CGCProductItem key={index} {...cgcProduct} />)
+        {cgcProducts.map((cgcProduct) => (
+          <CGCProductItem key={cgcProduct.id} {...cgcProduct} />)
         )}
           {/* <AllBooks /> */}
           {/* <AllCGCProducts /> */}

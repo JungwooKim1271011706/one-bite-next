@@ -1,13 +1,9 @@
 import mongoose, { Schema, Document, model, models } from 'mongoose';
 import { CGCproduct } from '@/types';
 
-type BaseProduct = Omit<CGCproduct, "id">;
+export interface CGCProductDocument extends Omit<Document, "id">, CGCproduct {}
 
-interface ICGCProduct extends BaseProduct, Document {
-  id: number;
-}
-
-const ProductSchema = new Schema<ICGCProduct>({
+const ProductSchema = new Schema<CGCProductDocument>({
   id: { type: Number, required: true, unique: true },
   name: String,
   expirationDate: String,
@@ -24,6 +20,6 @@ const ProductSchema = new Schema<ICGCProduct>({
 
 
 // ✅ 모델 이름으로 정확히 체크
-const CGCProduct = models.CGCProduct || model<ICGCProduct>("CGCProduct", ProductSchema, "CGCProducts");
+const CGCProduct = models.CGCProduct || model<CGCProductDocument>("CGCProduct", ProductSchema, "CGCProducts");
 
 export default CGCProduct;
