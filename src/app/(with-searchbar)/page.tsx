@@ -33,56 +33,56 @@ import { getCGCProducts } from "@/lib/service/CGCProductService";
 //   }
 // };
 
-async function getCGCproductSize() {
-        const sheet = await getGoogleSheet("가격표");
-        const totalCount = (await sheet.getRows()).length;
-        return totalCount;
-}
+// async function getCGCproductSize() {
+//         const sheet = await getGoogleSheet("가격표");
+//         const totalCount = (await sheet.getRows()).length;
+//         return totalCount;
+// }
 
-async function getCGCproducts(page: number, size: number): Promise<CGCproduct[]> {
-        const sheet = await getGoogleSheet("가격표");
-        const rows = await sheet.getRows({
-          offset: (page -1) * size,
-          limit: size
-        });
+// async function getCGCproducts(page: number, size: number): Promise<CGCproduct[]> {
+//         const sheet = await getGoogleSheet("가격표");
+//         const rows = await sheet.getRows({
+//           offset: (page -1) * size,
+//           limit: size
+//         });
 
-        const getImageUrls = async (imageA: string, imageB: string) => {
-          let imageAUrl = '';
-          let imageBUrl = '';
-          const seperator = '가격표_Images/';
-          if (imageA && imageA.length > 0) {
-            imageA = imageA.substring(seperator.length);
-            imageAUrl = await getDriverImageUrl(imageA);
-          }
-          if (imageB && imageB.length > 0) {
-            imageB = imageB.substring(seperator.length);
-            imageBUrl = await getDriverImageUrl(imageB);
-          }
-          return {imageAUrl, imageBUrl};
-        };
+//         const getImageUrls = async (imageA: string, imageB: string) => {
+//           let imageAUrl = '';
+//           let imageBUrl = '';
+//           const seperator = '가격표_Images/';
+//           if (imageA && imageA.length > 0) {
+//             imageA = imageA.substring(seperator.length);
+//             imageAUrl = await getDriverImageUrl(imageA);
+//           }
+//           if (imageB && imageB.length > 0) {
+//             imageB = imageB.substring(seperator.length);
+//             imageBUrl = await getDriverImageUrl(imageB);
+//           }
+//           return {imageAUrl, imageBUrl};
+//         };
 
-        const cgcProduct: CGCproduct[] = await Promise.all(rows.map(async (row) => {
-            const itemData = row.toObject();
-            const { imageAUrl, imageBUrl } = await getImageUrls(itemData['사진 A'], itemData['사진 B']);
+//         const cgcProduct: CGCproduct[] = await Promise.all(rows.map(async (row) => {
+//             const itemData = row.toObject();
+//             const { imageAUrl, imageBUrl } = await getImageUrls(itemData['사진 A'], itemData['사진 B']);
 
-            return {
-                id: Number(itemData['ID']),
-                name: itemData['품 명'],
-                expirationDate: itemData['유통 기한'],
-                expirationDateNewLot: itemData['유통 기한 2 (NEW LOG)'],
-                suggestedRetailPrice: itemData['권장 소매가'],
-                suggestedWholesalePrice: itemData['권장 도매가'],
-                specification: itemData['규 격'],
-                category: itemData['구 분'],
-                type: itemData['항 목'],
-                itemFeatures: itemData['제품 특징'],
-                imageA: imageAUrl,
-                imageB: imageBUrl,
-            }
-        }));
+//             return {
+//                 id: Number(itemData['ID']),
+//                 name: itemData['품 명'],
+//                 expirationDate: itemData['유통 기한'],
+//                 expirationDateNewLot: itemData['유통 기한 2 (NEW LOG)'],
+//                 suggestedRetailPrice: itemData['권장 소매가'],
+//                 suggestedWholesalePrice: itemData['권장 도매가'],
+//                 specification: itemData['규 격'],
+//                 category: itemData['구 분'],
+//                 type: itemData['항 목'],
+//                 itemFeatures: itemData['제품 특징'],
+//                 imageA: imageAUrl,
+//                 imageB: imageBUrl,
+//             }
+//         }));
 
-        return cgcProduct;
-}
+//         return cgcProduct;
+// }
 
 type Props = {
   searchParams? : Promise<{
