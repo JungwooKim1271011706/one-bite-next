@@ -1,4 +1,4 @@
-import { connecttodatabase } from "@/lib/mongodb";
+import { connecttodatabase } from "@/lib/db/mongodb";
 import CGCProduct from "@/models/CgcProduct";
 import { getDriverImageUrl, getGoogleSheet } from "@/util/driver-utils";
 
