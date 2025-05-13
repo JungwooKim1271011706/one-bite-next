@@ -1,5 +1,7 @@
-import mongoose, { Schema, Document, model, models } from 'mongoose';
+import mongoose, { Schema, Document, model } from 'mongoose';
 import { CGCproduct } from '@/types';
+
+const models = mongoose.models;
 
 export interface CGCProductDocument extends Omit<Document, "id">, CGCproduct {}
 
