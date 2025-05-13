@@ -70,11 +70,7 @@ const adminJs = new AdminJS({
       },
     }
   ],
-  rootPath: '/admin',
-})
-
-adminJs.resources.forEach(r => {
-  console.log(r._decorated?.id || r.id)  // ✅ 실제 리소스 이름 확인용
+  rootPath: '/',
 })
 
 // const router = AdminJSExpress.buildRouter(adminJs)
