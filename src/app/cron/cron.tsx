@@ -2,6 +2,11 @@ import cron, { ScheduledTask } from 'node-cron';
 import fs from 'fs';
 import path from 'path';
 import { syncCgcProducts } from './SyncCGCProducts';
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
 
 const configPath = path.resolve(__dirname, "../config/cron-config.json");
 
