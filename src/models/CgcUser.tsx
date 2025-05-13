@@ -1,5 +1,8 @@
 // src/models/AdminUser.ts
 import mongoose, { Schema, Document, model } from 'mongoose'
+import { connecttodatabase } from '@/lib/db/mongodb';
+
+await connecttodatabase();
 
 const models = mongoose.models;
 
