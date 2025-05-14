@@ -10,7 +10,6 @@ import ko from '../locales/ko'
 AdminJS.registerAdapter(AdminJSMongoose);
 
 const adminJs = new AdminJS({
-  locale: ko,
   resources: [
     {
       resource: CGCProduct,
@@ -41,6 +40,7 @@ const adminJs = new AdminJS({
           phoneNumber: {},
           password: {
             isVisible: { list: false, show: false, edit: true, filter: false },
+            type: 'password',
           },
           role: {
             availableValues: [
@@ -70,6 +70,7 @@ const adminJs = new AdminJS({
       },
     }
   ],
+  locale: ko,
   rootPath: '/',
 })
 

@@ -1,10 +1,11 @@
 // locales/ko.ts
 import { Locale } from 'adminjs'
 
-const ko: Locale = {
-    availableLanguages: ['en', 'pl', 'ko'],
-    localeDetection: true,
-    language: 'ko',
+// const ko: Locale = {
+const ko = {
+  availableLanguages: ['en', 'pl', 'ko'],
+  localeDetection: true,
+  language: 'ko',
   translations: {
     labels: {
       loginWelcome: '천기초 관리자 로그인',
@@ -13,6 +14,10 @@ const ko: Locale = {
     },
     messages: {
       loginWelcome: '로그인을 진행해주세요',
+    },
+    properties : {
+      email: 'ID',
+      password: '비밀번호'
     },
     resources: {
       CGCUser: {
@@ -28,6 +33,9 @@ const ko: Locale = {
         },
       },
       CGCProduct: {
+        messages: {
+          name: '제품명',
+        },
         properties: {
           name: '제품명',
           expirationDate: '유통기한',
