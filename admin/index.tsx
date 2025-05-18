@@ -6,16 +6,19 @@ import CGCUser from '../src/models/CgcUser'
 import { comparePassword, hashPassword } from '@/lib/password/password'
 import ko from '../locales/ko'
 
-
 AdminJS.registerAdapter(AdminJSMongoose);
 
 const adminJs = new AdminJS({
+  locale: ko,
   resources: [
     {
       resource: CGCProduct,
       options: {
+        id: 'CGCProduct',
         properties: {
-          name : "이름",
+          name : {
+            label : "이름",
+          },
           category: {
 
           },
@@ -33,7 +36,7 @@ const adminJs = new AdminJS({
       options: {
         properties: {
           _id: { isVisible: false },
-          name: { isTitle: true, label: "이름입니다!!"},
+          name: { isTitle: true},
           email: {},
           position: {},
           department: {},
@@ -70,11 +73,9 @@ const adminJs = new AdminJS({
       },
     }
   ],
-  locale: ko,
   rootPath: '/',
-})
+});
 
-// const router = AdminJSExpress.buildRouter(adminJs)
 const router = AdminJSExpress.buildAuthenticatedRouter(adminJs, {
   authenticate: async (id, password) => {
     const user = await CGCUser.findOne({ id })
