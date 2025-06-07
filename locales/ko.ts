@@ -1,9 +1,3 @@
-import CGCProduct from "@/models/CgcProduct"
-import CGCUser from "@/models/CgcUser"
-import { Button, Navigation } from "@adminjs/design-system"
-import { Dashboard } from "adminjs"
-
-
 const ko = {
   language: 'ko',
   availableLanguages: ['en', 'pl', 'ko'],
@@ -62,6 +56,9 @@ const ko = {
             itemFeatures: '제품 특징',
             imageA: '이미지A',
             imageB: '이미지B',
+            audioFileKey: '음성파일 고유값',
+            audioFileMimeType: '파일 형식',
+            audioFile: '음성파일',
             __v: '0'
           }
         }

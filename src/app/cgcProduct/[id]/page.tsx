@@ -6,14 +6,13 @@ import { getDriverImageUrl } from "@/util/driver-utils";
 import { getGoogleSheet } from "@/util/driver-utils";
 import { connecttodatabase } from "@/lib/db/mongodb"
 import { getCGCProductById, getCGCProducts} from "@/lib/service/CGCProductService";
+import { getMimeType } from "@lib/utils/mime-utils";
 
 export default async function Page({
     params,
 } : {
     params : Promise<{ id: string}>; // params에서 id를 꺼내서 가져와야 함..
 }) {
-
-
     const {id = "0"} = await params
     const cgcProduct = await getCGCProductById(Number(id));
     if (!cgcProduct) {
@@ -34,6 +33,21 @@ export default async function Page({
                 <div className={style.author}>규격 : {cgcProduct.specification}</div>
                 <div className={style.author}>구분 : {cgcProduct.category}</div>
                 <div className={style.author}>항목 : {cgcProduct.type}</div>
+                {cgcProduct.audioFileKey &&
+                    <div>
+                        <div className={style.title}>📢 제품 음성 설명</div>
+                        <div className={style.audioDescription}>
+                            <audio controls>
+                                <source
+                                    src={`http://localhost:5555/uploads/audio/${encodeURIComponent(cgcProduct.audioFileKey)}`}
+                                    type={getMimeType(cgcProduct.audioFileKey)}
+                                />
+                                브라우저가 audio 태그를 지원하지 않습니다.
+                            </audio>
+                        </div>
+                        </div>
+                }
+                <div className={style.title}>📖 제품 상세 설명</div>
                 <div className={style.description}>{cgcProduct.itemFeatures}</div>
             </section>
         </div>

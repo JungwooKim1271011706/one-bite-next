@@ -21,6 +21,8 @@ const ProductSchema = new Schema<CGCProductDocument>({
   itemFeatures: String,
   imageA: String,
   imageB: String,
+  audioFileKey: String,
+  audioFileMimeType: String,
 });
 
 

@@ -31,4 +31,7 @@ export interface CGCproduct {
   itemFeatures: string;
   imageA: string;
   imageB: string;
+  audioFileKey: string,
+  audioFilePath: string,
+  audioFileMimeType: string,
 }
