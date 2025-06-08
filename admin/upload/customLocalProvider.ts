@@ -1,14 +1,13 @@
-// lib/upload/customLocalProvider.ts
 import fs from 'fs/promises'
 import path from 'path'
-import type { BaseProvider, ProviderOpts } from '@adminjs/upload'
+import { BaseProvider } from '@adminjs/upload'
 
-export class SafeLocalProvider implements BaseProvider {
-  name = 'SafeLocalProvider'  // ✅ 타입 오류 해결
+export class SafeLocalProvider extends BaseProvider {
+  name = 'SafeLocalProvider'
   bucket: string
-  opts?: ProviderOpts | undefined
 
   constructor(bucket: string) {
+    super(bucket)
     this.bucket = bucket
   }
 
@@ -25,6 +24,7 @@ export class SafeLocalProvider implements BaseProvider {
   }
 
   path(key: string, bucket?: string): string {
+    // 다운로드용 경로 반환
     return `${key}`
   }
 }
