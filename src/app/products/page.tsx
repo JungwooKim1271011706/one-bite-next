@@ -20,10 +20,10 @@ export default async function ProductPage( { searchParams } : Props) {
   const page = Number(params?.page || '1');
   const size = 10;
   const currentPage = Math.max(page, 1);
-  const roWCGCProducts = await CGCProduct.find().sort({id : 1}).limit(size);
-  const CGCProductsCount = roWCGCProducts.length;
+  const rowCGCProducts = await CGCProduct.find().sort({id : 1}).limit(size);
+  const CGCProductsCount = rowCGCProducts.length;
 
-  const CGCProducts: CGCproduct[] = roWCGCProducts.map(p => ({
+  const CGCProducts: CGCproduct[] = rowCGCProducts.map(p => ({
     id: p.id,
     name: p.name,
     expirationDate: p.expirationDate,
@@ -36,6 +36,8 @@ export default async function ProductPage( { searchParams } : Props) {
     itemFeatures: p.itemFeatures,
     imageA: p.imageA,
     imageB: p.imageB,
+    audioFileKey: p.audioFileKey,
+    audioFileMimeType: p.audioFileMimeType,
   }));
 
   return (
