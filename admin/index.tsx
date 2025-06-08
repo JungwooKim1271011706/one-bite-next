@@ -19,15 +19,15 @@ const componentLoader = new ComponentLoader();
 
 const uploadFeature = uploadFileFeature({
   componentLoader,
-  provider : new SafeLocalProvider('uploads/audio'),
-  // provider: {
-  //   local: {
-  //     bucket: 'uploads/audio',
-  //     opts: {
-  //       baseUrl: undefined,
-  //     }
-  //   }
-  // },
+  // provider : new SafeLocalProvider('uploads/audio'),
+  provider: {
+    local: {
+      bucket: 'uploads/audio',
+      opts: {
+        baseUrl: undefined,
+      }
+    }
+  },
   properties: {
     key: 'audioFileKey',
     mimeType: 'audioFileMimeType',
