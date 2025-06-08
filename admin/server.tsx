@@ -10,10 +10,12 @@ import path from 'path'
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const app = express()
+const app = express();
 
-app.use(adminJs.options.rootPath, adminRouter)
+app.use(adminJs.options.rootPath, adminRouter);
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+app.use(express.json({ limit: '30mb'}));
+app.use(express.urlencoded({ extended: true, limit: '30mb'}));
 
 mongoose.connect(process.env.MONGODB_URI!).then(() => {
   app.listen(5555, () => {
