@@ -8,6 +8,7 @@ import ko from '../locales/ko'
 import uploadFileFeature from '@adminjs/upload'
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { UploadProvider } from './components/UploadProvider'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,14 +19,15 @@ const componentLoader = new ComponentLoader();
 
 const uploadFeature = uploadFileFeature({
   componentLoader,
-  provider: {
-    local: {
-      bucket: 'uploads/audio',
-      opts: {
-        baseUrl: undefined,
-      }
-    }
-  },
+  provider: new UploadProvider,
+  // provider: {
+  //   local: {
+  //     bucket: 'uploads/audio',
+  //     opts: {
+  //       baseUrl: undefined,
+  //     }
+  //   }
+  // },
   properties: {
     key: 'audioFileKey',
     mimeType: 'audioFileMimeType',

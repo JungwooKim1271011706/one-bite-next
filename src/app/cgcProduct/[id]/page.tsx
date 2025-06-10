@@ -7,6 +7,7 @@ import { getGoogleSheet } from "@/util/driver-utils";
 import { connecttodatabase } from "@/lib/db/mongodb"
 import { getCGCProductById, getCGCProducts} from "@/lib/service/CGCProductService";
 import { getMimeType } from "@lib/utils/mime-utils";
+import { headers } from "next/headers";
 
 export default async function Page({
     params,
@@ -18,6 +19,13 @@ export default async function Page({
     if (!cgcProduct) {
         return <div>id에 해당하는 제품이 없습니다.... 허허ㅎ.</div>
     }
+
+    const headersList = headers()
+    const host = (await headersList).get('host') || 'localhost:5555' // 기본값 fallback
+    const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http'
+    const baseUrl = `${protocol}://${host.replace(/:\d+$/, ':39443')}` // 포트를 관리자(AdminJS) 포트로 강제 설정
+    const audioUrl = `${baseUrl}/uploads/audio/${encodeURIComponent(cgcProduct.audioFileKey)}`
+
     return (
         <div className={style.container}>
             <section>
@@ -39,7 +47,7 @@ export default async function Page({
                         <div className={style.audioDescription}>
                             <audio controls>
                                 <source
-                                    src={`http://localhost:5555/uploads/audio/${encodeURIComponent(cgcProduct.audioFileKey)}`}
+                                    src={audioUrl}
                                     type={getMimeType(cgcProduct.audioFileKey)}
                                 />
                                 브라우저가 audio 태그를 지원하지 않습니다.
