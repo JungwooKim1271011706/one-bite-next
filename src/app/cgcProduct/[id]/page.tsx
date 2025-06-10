@@ -21,9 +21,15 @@ export default async function Page({
     }
 
     const headersList = headers()
-    const host = (await headersList).get('host') || 'localhost:5555' // 기본값 fallback
+    const hostHeader = (await headersList).get('host') || 'localhost'
     const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http'
-    const baseUrl = `${protocol}://${host.replace(/:\d+$/, ':39443')}` // 포트를 관리자(AdminJS) 포트로 강제 설정
+
+    // ✅ 포트 유무에 따라 강제 추가
+    const baseHost = hostHeader.includes(':')
+    ? hostHeader.replace(/:\d+$/, ':39443')
+    : `${hostHeader}:39443`
+
+    const baseUrl = `${protocol}://${baseHost}`
     const audioUrl = `${baseUrl}/uploads/audio/${encodeURIComponent(cgcProduct.audioFileKey)}`
 
     return (
