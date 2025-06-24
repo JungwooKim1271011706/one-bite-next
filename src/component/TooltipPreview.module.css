@@ -1,0 +1,11 @@
+.wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.tooltipImage {
+  display: flex;
+  justify-content: center;
+  margin: 8px 0;
+}
