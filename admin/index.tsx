@@ -141,7 +141,8 @@ const router = AdminJSExpress.buildAuthenticatedRouter(adminJs, {
   cookieName: 'adminjs',
   cookiePassword: process.env.ADMIN_COOKIE_SECRET || 'cookie-secret',
   formidableOptions : {
-    maxFileSize: 1000 * 1024 * 1024,
+    // 10G
+    maxFileSize: 10000 * 1024 * 1024,
   }
 })
 
