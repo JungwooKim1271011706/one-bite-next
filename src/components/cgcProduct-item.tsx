@@ -6,7 +6,6 @@ import style from './book-item.module.css'
 
 export default function CGCProductItem(product: CGCproduct) {
   return (
-    <Link href={`/cgcProduct/${product.id}`} className={style.container}>
         <TooltipPreview product={product}>
             <div className={style.container}>
             {product.imageA && (
@@ -21,6 +20,5 @@ export default function CGCProductItem(product: CGCproduct) {
             </div>
             </div>
         </TooltipPreview>
-    </Link>
   )
 }
