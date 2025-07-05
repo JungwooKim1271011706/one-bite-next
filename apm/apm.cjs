@@ -5,6 +5,7 @@ const apm = require('elastic-apm-node').start({
   environment: 'production',               // 원하는 환경명
   captureBody: 'all',
   logLevel: 'info',
+  centralConfig: false,
   active: process.env.NODE_ENV === 'production', // 필요 시 조건부 활성화
 });
 
