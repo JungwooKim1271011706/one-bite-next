@@ -2,7 +2,10 @@ import mongoose, { Schema, Document, model } from 'mongoose';
 import { CGCproduct } from '@/types';
 import { connecttodatabase } from '@/lib/db/mongodb';
 
-await connecttodatabase();
+async function connDB() {
+  await connecttodatabase();
+}
+connDB();
 
 const models = mongoose.models;
 
