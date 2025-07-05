@@ -1,3 +1,4 @@
+import type { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv'
 dotenv.config()
 
@@ -11,6 +12,19 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+// ✅ 10GB 제한 미들웨어 추가
+app.use((req: Request, res: Response, next: NextFunction): void => {
+  const MAX_SIZE = 10 * 1024 * 1024 * 1024; // 10GB
+  const contentLength = parseInt(req.headers['content-length'] || '0', 10);
+
+  if (contentLength > MAX_SIZE) {
+    res.status(413).send('파일이 너무 큽니다. (10GB 제한)');
+    return;
+  }
+
+  next();
+});
 
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 app.use(adminJs.options.rootPath, adminRouter);
