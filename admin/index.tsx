@@ -36,6 +36,10 @@ const uploadFeature = uploadFileFeature({
   uploadPath: (record, filename) => {
     return `${Date.now()}-${filename}`;
   },
+  // @ts-ignore
+  formidable: {
+    maxFileSize: 10 * 1024 * 1024 * 1024, // ← 여기만 사용
+  },
 });
 
 componentLoader.override(
@@ -140,11 +144,7 @@ const router = AdminJSExpress.buildAuthenticatedRouter(adminJs, {
   },
   cookieName: 'adminjs',
   cookiePassword: process.env.ADMIN_COOKIE_SECRET || 'cookie-secret',
-}, {
-  formidableOptions: {
-    maxFileSize: 10 * 1024 * 1024 * 1024, // 10GB
   },
-} as any
 )
 
 export { adminJs, router }
