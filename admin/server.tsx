@@ -8,6 +8,7 @@ import { adminJs, router as adminRouter } from './index'
 import { fileURLToPath } from 'url';
 import path from 'path'
 import formidableMiddleware from 'express-formidable';
+import timeout from 'connect-timeout';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -41,6 +42,7 @@ app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 app.use(adminJs.options.rootPath, adminRouter);
 app.use(express.json({ limit: '10gb'}));
 app.use(express.urlencoded({ extended: true, limit: '10gb'}));
+app.use(timeout('10m'))
 
 app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
   console.error('🔥 전역 에러:', err);
