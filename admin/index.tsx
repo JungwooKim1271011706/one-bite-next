@@ -9,13 +9,9 @@ import uploadFileFeature from '@adminjs/upload'
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { UploadProvider } from './components/UploadProvider'
-import { IncomingForm } from 'formidable'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-// 타입 무시하고 재정의
-;(IncomingForm.prototype as any).maxFileSize = 10 * 1024 * 1024 * 1024 // 10GB
 
 AdminJS.registerAdapter(AdminJSMongoose);
 

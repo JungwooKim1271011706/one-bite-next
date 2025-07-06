@@ -7,11 +7,16 @@ import mongoose from 'mongoose'
 import { adminJs, router as adminRouter } from './index'
 import { fileURLToPath } from 'url';
 import path from 'path'
+import formidableMiddleware from 'express-formidable';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+app.use(formidableMiddleware({
+  maxFileSize: 10 * 1024 * 1024 * 1024, // 10GB
+}));
 
 // ✅ 10GB 제한 미들웨어 추가
 app.use((req: Request, res: Response, next: NextFunction): void => {
