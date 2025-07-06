@@ -36,7 +36,6 @@ const uploadFeature = uploadFileFeature({
   uploadPath: (record, filename) => {
     return `${Date.now()}-${filename}`;
   },
-  // @ts-ignore
   formidable: {
     maxFileSize: 10 * 1024 * 1024 * 1024, // ← 여기만 사용
   },
@@ -129,7 +128,6 @@ const adminJs = new AdminJS({
   rootPath: '/',
 });
 
-
 const router = AdminJSExpress.buildAuthenticatedRouter(adminJs, {
   authenticate: async (id, password) => {
     const user = await CGCUser.findOne({ id })
@@ -144,7 +142,12 @@ const router = AdminJSExpress.buildAuthenticatedRouter(adminJs, {
   },
   cookieName: 'adminjs',
   cookiePassword: process.env.ADMIN_COOKIE_SECRET || 'cookie-secret',
-  },
+  }, {
+    // @ts-ignore
+    formidableOptions : {
+      maxFileSize: 10 * 1024 * 1024 * 1024, // 10GB
+    }
+  }
 )
 
 export { adminJs, router }
