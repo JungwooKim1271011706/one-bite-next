@@ -18,6 +18,12 @@ app.use(formidableMiddleware({
   maxFileSize: 10 * 1024 * 1024 * 1024, // 10GB
 }));
 
+app.use((req, res, next) => {
+  req.setTimeout(10 * 60 * 1000); // 10분
+  res.setTimeout(10 * 60 * 1000); // 10분
+  next();
+});
+
 // ✅ 10GB 제한 미들웨어 추가
 app.use((req: Request, res: Response, next: NextFunction): void => {
   const MAX_SIZE = 10 * 1024 * 1024 * 1024; // 10GB
@@ -35,6 +41,11 @@ app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 app.use(adminJs.options.rootPath, adminRouter);
 app.use(express.json({ limit: '10gb'}));
 app.use(express.urlencoded({ extended: true, limit: '10gb'}));
+
+app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
+  console.error('🔥 전역 에러:', err);
+  res.status(500).send('Internal Server Error');
+});
 
 mongoose.connect(process.env.MONGODB_URI!).then(() => {
   app.listen(5555, () => {
