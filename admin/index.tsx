@@ -34,7 +34,7 @@ const uploadFeature = uploadFileFeature({
     file: 'audioFile',
   },
   uploadPath: (record, filename) => {
-  return `${Date.now()}-${filename}`;
+    return `${Date.now()}-${filename}`;
   },
 });
 
@@ -140,7 +140,11 @@ const router = AdminJSExpress.buildAuthenticatedRouter(adminJs, {
   },
   cookieName: 'adminjs',
   cookiePassword: process.env.ADMIN_COOKIE_SECRET || 'cookie-secret',
-},
+}, {
+  formidableOptions: {
+    maxFileSize: 10 * 1024 * 1024 * 1024, // 10GB
+  },
+} as any
 )
 
 export { adminJs, router }
