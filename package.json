@@ -39,6 +39,7 @@
     "@preconstruct/cli": "^2.1.1",
     "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.1",
+    "@types/formidable": "^3.4.5",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^20",
     "@types/node-cron": "^3.0.11",
