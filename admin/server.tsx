@@ -15,7 +15,7 @@ const app = express();
 
 // ✅ 10GB 제한 미들웨어 추가
 app.use((req: Request, res: Response, next: NextFunction): void => {
-  const MAX_SIZE = 10 * 1024 * 1024 * 1024; // 10GB
+  const MAX_SIZE = 2 * 1024 * 1024 * 1024; // 2GB
   const contentLength = parseInt(req.headers['content-length'] || '0', 10);
 
   if (contentLength > MAX_SIZE) {
