@@ -28,8 +28,8 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
 
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 app.use(adminJs.options.rootPath, adminRouter);
-app.use(express.json({ limit: '30mb'}));
-app.use(express.urlencoded({ extended: true, limit: '30mb'}));
+app.use(express.json({ limit: '10gb'}));
+app.use(express.urlencoded({ extended: true, limit: '10gb'}));
 
 mongoose.connect(process.env.MONGODB_URI!).then(() => {
   app.listen(5555, () => {
