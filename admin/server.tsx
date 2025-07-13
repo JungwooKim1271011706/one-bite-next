@@ -27,6 +27,14 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+app.use((req, res, next) => {
+  const trans = apm.startTransaction(`[ADMIN] ${req.method} ${req.originalUrl}`, 'request')
+  res.on('finish', () => {
+    trans?.end()
+  })
+  next()
+});
+
 app.use(formidableMiddleware({
   maxFileSize: 10 * 1024 * 1024 * 1024, // 10GB
 }));
