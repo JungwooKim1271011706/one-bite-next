@@ -2,8 +2,12 @@ import apm from 'elastic-apm-node';
 
 apm.start({
   serviceName: 'cgc-admin-app',
-  serverUrl: 'http://192.168.219.107:8200',
+  serverUrl: 'http://192.168.219.107:8200',// APM Server 주소
   environment: 'production',               // 원하는 환경명
+  captureBody: 'all',
+  logLevel: 'info',
+  centralConfig: false,
+  active: process.env.NODE_ENV === 'production', // 필요 시 조건부 활성화
 })
 
 import type { Request, Response, NextFunction } from 'express';
