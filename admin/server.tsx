@@ -1,3 +1,11 @@
+import apm from 'elastic-apm-node';
+
+apm.start({
+  serviceName: 'cgc-admin-app',
+  serverUrl: 'http://192.168.219.107:8200',
+  environment: 'production',               // 원하는 환경명
+})
+
 import type { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv'
 dotenv.config()
