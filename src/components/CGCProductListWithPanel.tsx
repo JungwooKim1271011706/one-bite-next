@@ -4,6 +4,7 @@ import { useState } from 'react'
 import CGCProductItem from './cgcProduct-item'
 import CGCProductPanel from './CGCProductPanel'
 import { CGCproduct } from '@/types'
+import style from './CGCProductListWithPanel.module.css'
 
 export default function CGCProductListWithPanel({ products }: { products: CGCproduct[] }) {
   const [selectedId, setSelectedId] = useState<number | null>(null)
@@ -12,7 +13,7 @@ export default function CGCProductListWithPanel({ products }: { products: CGCpro
     <div style={{ display: 'flex', position: 'relative' }}>
       <div style={{ flex: 1 }}>
         {products.map(product => (
-          <div key={product.id} onClick={() => setSelectedId(product.id)}>
+          <div className={style.container} key={product.id} onClick={() => setSelectedId(product.id)}>
             <CGCProductItem {...product} />
           </div>
         ))}

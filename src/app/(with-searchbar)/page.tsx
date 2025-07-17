@@ -19,7 +19,7 @@ export default async function Home({ searchParams }: Props) {
   return (
     <div className={style.container}>
       <section>
-        <h3>천기초 - 제품리스트</h3>
+        <h3>천기초 - 제품리스트</h3><br/>
         <CGCProductListWithPanel products={cgcProducts} />
         <Pagination currentPage={page} totalCount={cgcProductsCount} groupSize={10} searchQuery="" />
       </section>
