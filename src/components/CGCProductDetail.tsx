@@ -28,7 +28,7 @@ export default function CGCProductDetail({ product, audioUrl }: CGCProductDetail
           <div>
             <div className={styles.title}>📢 제품 음성 설명</div>
             <div className={styles.audioDescription}>
-              <audio controls>
+              <audio controls controlsList="nodownload">
                 <source
                   src={audioUrl}
                   type={getMimeType(product.audioFileKey)}
