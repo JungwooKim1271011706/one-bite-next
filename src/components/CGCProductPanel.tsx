@@ -5,7 +5,7 @@ import { CGCproduct } from '@/types'
 import styles from './CGCProductPanel.module.css'
 import CGCProductDetail from './CGCProductDetail'
 
-export default function CGCProductPanel({ productId, onClose }: { productId: number, onClose: () => void }) {
+export default function CGCProductPanel({ productId, onClose, baseUrl }: { productId: number, onClose: () => void, baseUrl: string }) {
   const [product, setProduct] = useState<CGCproduct | null>(null)
   const [isClosing, setIsClosing] = useState(false)
   const [width, setWidth] = useState(420)
@@ -56,7 +56,7 @@ export default function CGCProductPanel({ productId, onClose }: { productId: num
           className={styles.resizer}
           onMouseDown={() => { isResizing.current = true }}
         />
-        <CGCProductDetail product={product} />
+        <CGCProductDetail product={product} audioUrl={`${baseUrl}/uploads/audio/${encodeURIComponent(product.audioFileKey)}`} />
       </div>
     </div>
   )

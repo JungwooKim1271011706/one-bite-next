@@ -31,13 +31,23 @@ import CGCProductListWithPanel from "@/components/CGCProductListWithPanel";
 //   };
 // }
 export default async function Page({ searchParams }: any) {
+  const headersList = headers()
+  const hostHeader = (await headersList).get('host') || 'localhost'
+  const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http'
+
+  // ✅ 포트 유무에 따라 강제 추가
+  const baseHost = hostHeader.includes(':')
+  ? hostHeader.replace(/:\d+$/, ':39443')
+  : `${hostHeader}:39443`
+
+  const baseUrl = `${protocol}://${baseHost}`
   const q = searchParams?.q || "";
   const page = Number(searchParams?.page || "1");
   const size = 10;
   const { cgcProducts, cgcProductsCount } = await getCGCProducts(page, size, q);
   return (
     <Suspense key={q} fallback={<BookListSkeleton count={5} />}>
-      <CGCProductListWithPanel products={cgcProducts} />
+      <CGCProductListWithPanel products={cgcProducts} baseUrl={baseUrl} />
       <Pagination currentPage={page} totalCount={cgcProductsCount} groupSize={size} searchQuery={q}/>
     </Suspense>
   );

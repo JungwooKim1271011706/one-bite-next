@@ -6,7 +6,7 @@ import CGCProductPanel from './CGCProductPanel'
 import { CGCproduct } from '@/types'
 import style from './CGCProductListWithPanel.module.css'
 
-export default function CGCProductListWithPanel({ products }: { products: CGCproduct[] }) {
+export default function CGCProductListWithPanel({ products, baseUrl }: { products: CGCproduct[], baseUrl: string }) {
   const [selectedId, setSelectedId] = useState<number | null>(null)
 
   return (
@@ -23,6 +23,7 @@ export default function CGCProductListWithPanel({ products }: { products: CGCpro
         <CGCProductPanel
           productId={selectedId}
           onClose={() => setSelectedId(null)}
+          baseUrl={baseUrl}
         />
       )}
     </div>
