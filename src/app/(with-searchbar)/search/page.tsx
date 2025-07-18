@@ -11,39 +11,34 @@ import { headers } from "next/headers";
 import { getCGCProducts } from "@/lib/service/CGCProductService";
 import CGCProductListWithPanel from "@/components/CGCProductListWithPanel";
 
+// type Props = {
+//   searchParams?: {
+//     q?: string
+//     page?: string
+//   }
+// }
 
-type Props = {
-  searchParams : Promise<{
-    q? : string,
-    page? : number}>;
-}
-export async function generateMetadata({ searchParams} : Props): Promise<Metadata> {
-  const { q = "" } = await searchParams;
-  return {
-    title: `${q} : 천기초 제품 검색`,
-    description: `${q} 검색 결과입니다`,
-    openGraph: {
-      title: `${q} : 천기초 제품 검색`,
-      description: `${q} 검색 결과입니다`,
-      images: ["/thumbnail.png"],
-    },
-  };
-}
-
-export default async function Page({
-  searchParams,
-}: Props
-) {
-  const { q = "", page = "1" } = await searchParams;
-  const pageNumber = Number(page);
-  const size = 10
-  const {cgcProducts, cgcProductsCount} = await getCGCProducts(pageNumber, size, q);
+// export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+//   const q = searchParams?.q || "";
+//   return {
+//     title: `${q} : 천기초 제품 검색`,
+//     description: `${q} 검색 결과입니다`,
+//     openGraph: {
+//       title: `${q} : 천기초 제품 검색`,
+//       description: `${q} 검색 결과입니다`,
+//       images: ["/thumbnail.png"],
+//     },
+//   };
+// }
+export default async function Page({ searchParams }: any) {
+  const q = searchParams?.q || "";
+  const page = Number(searchParams?.page || "1");
+  const size = 10;
+  const { cgcProducts, cgcProductsCount } = await getCGCProducts(page, size, q);
   return (
-  <Suspense 
-    key={q} 
-    fallback={<BookListSkeleton count={5} />}>
-        <CGCProductListWithPanel products={cgcProducts} />
-        <Pagination currentPage={pageNumber} totalCount={cgcProductsCount} groupSize={size} searchQuery={q}/>
-  </Suspense>
+    <Suspense key={q} fallback={<BookListSkeleton count={5} />}>
+      <CGCProductListWithPanel products={cgcProducts} />
+      <Pagination currentPage={page} totalCount={cgcProductsCount} groupSize={size} searchQuery={q}/>
+    </Suspense>
   );
 }

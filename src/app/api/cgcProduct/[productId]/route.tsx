@@ -3,10 +3,19 @@ import { connecttodatabase } from "@/lib/db/mongodb";
 import CGCProduct from "@/models/CgcProduct";
 import { NextResponse } from "next/server";
 
-export async function GET(request: Request, context: { params: { productId: string } }) {
+// export async function GET(request: Request, context: { params: { productId: string } }) {
+//   await connecttodatabase();
+
+//   const { productId } = await context.params; // 비동기 await 필요
+//   const CGCproduct = await CGCProduct.findOne({ id: Number(productId) }).lean();
+//   if (!CGCproduct) return NextResponse.json({ error: "Product not found" }, { status: 404 });
+//   return NextResponse.json(CGCproduct);
+// }
+
+export async function GET(request: Request, { params }: any) {
   await connecttodatabase();
 
-  const { productId } = await context.params; // 비동기 await 필요
+  const productId: string = params?.productId;
   const CGCproduct = await CGCProduct.findOne({ id: Number(productId) }).lean();
   if (!CGCproduct) return NextResponse.json({ error: "Product not found" }, { status: 404 });
   return NextResponse.json(CGCproduct);
