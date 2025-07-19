@@ -47,7 +47,7 @@ export default async function ProductPage( { searchParams } : Props) {
         {CGCProducts.map((cgcProduct, index) => (
           <CGCProductItem key={index} {...cgcProduct} />)
         )}
-        <Pagination currentPage={currentPage} totalCount={CGCProductsCount} groupSize={size} searchQuery=""/>
+        {/* <Pagination currentPage={currentPage} totalCount={CGCProductsCount} groupSize={size} searchQuery=""/> */}
       </ul>
     </div>
   );

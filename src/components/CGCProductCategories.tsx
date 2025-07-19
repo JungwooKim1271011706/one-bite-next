@@ -122,8 +122,8 @@ export default function CGCProductCategories({ categories, baseUrl }: { categori
           currentPage={page}
           totalCount={totalCount}
           groupSize={size}
-          onPageChange={handlePageChange}
           searchQuery={query}
+          onPageChange={handlePageChange}
         />
       </div>
     </div>
