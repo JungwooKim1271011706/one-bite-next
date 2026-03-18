@@ -1,10 +1,6 @@
-.searchBox {
-  margin-bottom: 16px;
-}
-
 .summary {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
   gap: 12px;
   align-items: stretch;
   margin-bottom: 20px;

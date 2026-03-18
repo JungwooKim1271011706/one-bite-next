@@ -1,0 +1,38 @@
+.wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.chip {
+  min-height: 40px;
+  padding: 0 18px;
+  border: 1px solid #d1d5db;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.active {
+  border-color: #2563eb;
+  background: #2563eb;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .wrap {
+    gap: 8px;
+  }
+
+  .chip {
+    min-height: 36px;
+    padding: 0 14px;
+    font-size: 13px;
+  }
+}

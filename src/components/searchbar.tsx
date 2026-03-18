@@ -18,6 +18,7 @@ export default function Searchbar({
   const [search, setSearch] = useState("");
 
   const q = searchParams.get("q");
+  const category = searchParams.get("category");
 
   useEffect(() => {
     setSearch(q || "");
@@ -31,11 +32,22 @@ export default function Searchbar({
     const nextSearch = search.trim();
 
     if (!nextSearch) {
+      if (category) {
+        router.push(`/?category=${encodeURIComponent(category)}&page=1`);
+        return;
+      }
       router.push("/");
       return;
     }
 
-    router.push(`/search?q=${encodeURIComponent(nextSearch)}&page=1`);
+    const params = new URLSearchParams();
+    params.set("q", nextSearch);
+    params.set("page", "1");
+    if (category) {
+      params.set("category", category);
+    }
+
+    router.push(`/search?${params.toString()}`);
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
