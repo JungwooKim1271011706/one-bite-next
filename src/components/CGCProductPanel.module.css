@@ -1,3 +1,10 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.18);
+  z-index: 999;
+}
+
 .panel {
   position: fixed;
   top: 0;
@@ -120,5 +127,9 @@
 
   .resizeHandle {
     display: none;
+  }
+
+  .overlay {
+    background: rgba(17, 24, 39, 0.08);
   }
 }
