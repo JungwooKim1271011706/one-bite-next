@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { CGCproduct } from '@/types'
 import styles from './CGCProductPanel.module.css'
@@ -10,8 +11,60 @@ type Props = {
 }
 
 export default function CGCProductPanel({ product, onClose }: Props) {
+  const panelRef = useRef<HTMLElement | null>(null)
+  const [width, setWidth] = useState(420)
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setWidth(window.innerWidth)
+        return
+      }
+      setWidth(current => Math.min(Math.max(current, 320), Math.floor(window.innerWidth * 0.7)))
+    }
+
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  const onResizeStart = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (window.innerWidth <= 768) {
+      return
+    }
+
+    const startX = event.clientX
+    const startWidth = panelRef.current?.offsetWidth ?? width
+
+    const onPointerMove = (moveEvent: PointerEvent) => {
+      const delta = startX - moveEvent.clientX
+      const nextWidth = Math.min(Math.max(startWidth + delta, 320), Math.floor(window.innerWidth * 0.7))
+      setWidth(nextWidth)
+    }
+
+    const onPointerUp = () => {
+      window.removeEventListener('pointermove', onPointerMove)
+      window.removeEventListener('pointerup', onPointerUp)
+    }
+
+    window.addEventListener('pointermove', onPointerMove)
+    window.addEventListener('pointerup', onPointerUp)
+  }
+
   return (
-    <aside className={styles.panel} aria-label={`${product.name} details`}>
+    <aside
+      ref={panelRef}
+      className={styles.panel}
+      aria-label={`${product.name} details`}
+      style={{ ['--panel-width' as string]: `${width}px` }}
+    >
+      <div
+        className={styles.resizeHandle}
+        onPointerDown={onResizeStart}
+        role="separator"
+        aria-orientation="vertical"
+        aria-label="Resize details panel"
+      />
       <button className={styles.close} onClick={onClose} aria-label="Close details panel">
         x
       </button>

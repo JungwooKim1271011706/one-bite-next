@@ -1,14 +1,11 @@
-import BookItem from "@/components/book-item";
 import BookListSkeleton from "@/components/skeleton/book-list-skeleton";
-import { BookData, CGCproduct } from "@/types";
 import { Metadata } from "next";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense } from "react";
 import CGCProductItem from "@/components/cgcProduct-item";
 import Pagination from "@/components/pagiation";
-import { getDriverImageUrl } from "@/util/driver-utils";
-import { getGoogleSheet } from "@/util/driver-utils";
-import { headers } from "next/headers";
 import { getCGCProducts } from "@/lib/service/CGCProductService";
+import Link from "next/link";
+import style from "./search-page.module.css";
 
 // async function SearchResult({q, page} : {q : string; page : number}) {
 //   const size = 10;
@@ -106,12 +103,27 @@ export default async function Page({
   <Suspense 
     key={q} 
     fallback={<BookListSkeleton count={5} />}>
+      <section className={style.summary}>
+        <div className={style.field}>
+          <span className={style.label}>검색어</span>
+          <strong>{q || "-"}</strong>
+        </div>
+        <div className={style.field}>
+          <span className={style.label}>검색 결과</span>
+          <strong>{cgcProductsCount}건</strong>
+        </div>
+        <div className={style.field}>
+          <span className={style.label}>현재 페이지</span>
+          <strong>{pageNumber}</strong>
+        </div>
+        <Link href="/" className={style.resetLink}>전체 목록</Link>
+      </section>
+      <div className={style.results}>
         {cgcProducts.map((cgcProduct) => (
           <CGCProductItem key={cgcProduct.id} {...cgcProduct} />)
         )}
-          {/* <AllBooks /> */}
-          {/* <AllCGCProducts /> */}
-          <Pagination currentPage={pageNumber} totalCount={cgcProductsCount} groupSize={size} searchQuery={q}/>
+      </div>
+      <Pagination currentPage={pageNumber} totalCount={cgcProductsCount} groupSize={size} searchQuery={q}/>
       {/* <SearchResult q={q} page={pageNumber} /> */}
   </Suspense>
   );

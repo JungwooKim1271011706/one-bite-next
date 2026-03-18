@@ -2,7 +2,7 @@
   position: fixed;
   top: 0;
   right: 0;
-  width: min(420px, 100vw);
+  width: min(var(--panel-width, 420px), 100vw);
   height: 100%;
   background: white;
   border-left: 1px solid #d7d7d7;
@@ -11,6 +11,27 @@
   overflow-y: auto;
   animation: slideIn 0.3s ease-out forwards;
   z-index: 1000;
+}
+
+.resizeHandle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 100%;
+  cursor: ew-resize;
+}
+
+.resizeHandle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  width: 4px;
+  height: 72px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  transform: translateY(-50%);
 }
 
 @keyframes slideIn {
@@ -95,5 +116,9 @@
     width: 100vw;
     border-left: none;
     box-shadow: none;
+  }
+
+  .resizeHandle {
+    display: none;
   }
 }
