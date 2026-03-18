@@ -11,18 +11,19 @@ import style from "./search-page.module.css";
 type Props = {
   searchParams: Promise<{
     q?: string;
-    page?: number;
+    page?: number | string;
   }>;
 };
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const { q = "" } = await searchParams;
+
   return {
-    title: `${q} : 천기초 제품 검색`,
-    description: `${q} 검색 결과입니다`,
+    title: `${q} : \uCC9C\uAE30\uCD08 \uC81C\uD488 \uAC80\uC0C9`,
+    description: `${q} \uAC80\uC0C9 \uACB0\uACFC\uC785\uB2C8\uB2E4`,
     openGraph: {
-      title: `${q} : 천기초 제품 검색`,
-      description: `${q} 검색 결과입니다`,
+      title: `${q} : \uCC9C\uAE30\uCD08 \uC81C\uD488 \uAC80\uC0C9`,
+      description: `${q} \uAC80\uC0C9 \uACB0\uACFC\uC785\uB2C8\uB2E4`,
       images: ["/thumbnail.png"],
     },
   };
@@ -37,30 +38,33 @@ export default async function Page({ searchParams }: Props) {
   return (
     <Suspense key={q} fallback={<BookListSkeleton count={5} />}>
       <div className={style.searchBox}>
-        <Searchbar placeholder="검색어를 다시 입력하세요" />
+        <Searchbar placeholder={"검색어를 다시 입력하세요"} />
       </div>
+
       <section className={style.summary}>
         <div className={style.field}>
-          <span className={style.label}>검색어</span>
+          <span className={style.label}>{"검색어"}</span>
           <strong>{q || "-"}</strong>
         </div>
         <div className={style.field}>
-          <span className={style.label}>검색 결과</span>
-          <strong>{cgcProductsCount}건</strong>
+          <span className={style.label}>{"검색 결과"}</span>
+          <strong>{`${cgcProductsCount}건`}</strong>
         </div>
         <div className={style.field}>
-          <span className={style.label}>현재 페이지</span>
+          <span className={style.label}>{"현재 페이지"}</span>
           <strong>{pageNumber}</strong>
         </div>
         <Link href="/" className={style.resetLink}>
-          전체 목록
+          {"전체 목록"}
         </Link>
       </section>
+
       <div className={style.results}>
         {cgcProducts.map((cgcProduct) => (
           <CGCProductItem key={cgcProduct.id} {...cgcProduct} />
         ))}
       </div>
+
       <Pagination
         currentPage={pageNumber}
         totalCount={cgcProductsCount}
