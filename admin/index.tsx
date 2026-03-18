@@ -17,7 +17,11 @@ AdminJS.registerAdapter(AdminJSMongoose);
 
 const componentLoader = new ComponentLoader();
 
-const uploadFeature = uploadFileFeature({
+const uploadFeatureOptions: Parameters<typeof uploadFileFeature>[0] & {
+  formidable?: {
+    maxFileSize: number
+  }
+} = {
   componentLoader,
   provider: new UploadProvider,
   // provider: {
@@ -39,7 +43,9 @@ const uploadFeature = uploadFileFeature({
   formidable: {
     maxFileSize: 10 * 1024 * 1024 * 1024, // 10GB 
   }
-});
+};
+
+const uploadFeature = uploadFileFeature(uploadFeatureOptions as Parameters<typeof uploadFileFeature>[0]);
 
 componentLoader.override(
   'UploadShowComponent',
