@@ -12,10 +12,10 @@ export default function CGCProductItem(product: CGCproduct) {
         )}
         <div>
           <div className={style.title}>{product.name}</div>
-          <div className={style.subTitle}>Expiration: {product.expirationDate}</div>
+          <div className={style.subTitle}>{'\uC720\uD1B5 \uAE30\uD55C'} : {product.expirationDate}</div>
           <br />
-          <div className={style.author}>Retail: {product.suggestedRetailPrice}</div>
-          <div className={style.author}>Wholesale: {product.suggestedWholesalePrice}</div>
+          <div className={style.author}>{'\uAD8C\uC7A5 \uC18C\uB9E4\uAC00'} : {product.suggestedRetailPrice}</div>
+          <div className={style.author}>{'\uAD8C\uC7A5 \uB3C4\uB9E4\uAC00'} : {product.suggestedWholesalePrice}</div>
         </div>
       </div>
     </TooltipPreview>
