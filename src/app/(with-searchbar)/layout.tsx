@@ -15,7 +15,9 @@ export default async function Layout({
       <Suspense fallback={<div>Loading...</div>}>
         <Searchbar />
       </Suspense>
-      <CategoryFilter categories={categories} />
+      <Suspense fallback={null}>
+        <CategoryFilter categories={categories} />
+      </Suspense>
       {children}
     </div>
   );
