@@ -4,10 +4,10 @@ import { getCGCProducts } from "@/lib/service/CGCProductService"
 import style from './page.module.css';
 
 type Props = {
-  searchParams?: {
+  searchParams?: Promise<{
     page?: string;
-  };
-};
+  }>;
+}
 
 export default async function Home({ searchParams }: Props) {
   const params = await searchParams
