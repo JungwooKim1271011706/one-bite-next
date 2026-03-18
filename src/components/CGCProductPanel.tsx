@@ -1,25 +1,56 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { CGCproduct } from '@/types'
 import styles from './CGCProductPanel.module.css'
 
-export default function CGCProductPanel({ productId, onClose }: { productId: number, onClose: () => void }) {
-  const [product, setProduct] = useState<CGCproduct | null>(null)
+type Props = {
+  product: CGCproduct
+  onClose: () => void
+}
 
-  useEffect(() => {
-    fetch(`/api/cgcProduct/${productId}`).then(res => res.json()).then(setProduct)
-  }, [productId])
-
-  if (!product) return null
-
+export default function CGCProductPanel({ product, onClose }: Props) {
   return (
-    <div className={styles.panel}>
-      <button className={styles.close} onClick={onClose}>✖</button>
-      <h2>{product.name}</h2>
-      <p>{product.itemFeatures}</p>
-      <p>유통기한: {product.expirationDate}</p>
-      {/* 이미지 등 추가 가능 */}
-    </div>
+    <aside className={styles.panel} aria-label={`${product.name} details`}>
+      <button className={styles.close} onClick={onClose} aria-label="Close details panel">
+        x
+      </button>
+      {product.imageA && (
+        <div className={styles.imageWrap}>
+          <Image src={product.imageA} alt={product.name} width={320} height={320} />
+        </div>
+      )}
+      <h2 className={styles.title}>{product.name}</h2>
+      <dl className={styles.metaList}>
+        <div>
+          <dt>Expiration</dt>
+          <dd>{product.expirationDate || '-'}</dd>
+        </div>
+        <div>
+          <dt>Retail Price</dt>
+          <dd>{product.suggestedRetailPrice || '-'}</dd>
+        </div>
+        <div>
+          <dt>Wholesale Price</dt>
+          <dd>{product.suggestedWholesalePrice || '-'}</dd>
+        </div>
+        <div>
+          <dt>Specification</dt>
+          <dd>{product.specification || '-'}</dd>
+        </div>
+        <div>
+          <dt>Category</dt>
+          <dd>{product.category || '-'}</dd>
+        </div>
+        <div>
+          <dt>Type</dt>
+          <dd>{product.type || '-'}</dd>
+        </div>
+      </dl>
+      <section className={styles.descriptionSection}>
+        <h3>Description</h3>
+        <p>{product.itemFeatures || 'No description available.'}</p>
+      </section>
+    </aside>
   )
 }

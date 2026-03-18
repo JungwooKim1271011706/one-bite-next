@@ -2,12 +2,12 @@
   position: fixed;
   top: 0;
   right: 0;
-  width: 420px;
+  width: min(420px, 100vw);
   height: 100%;
   background: white;
-  border-left: 1px solid #ccc;
+  border-left: 1px solid #d7d7d7;
   box-shadow: -4px 0 10px rgba(0,0,0,0.2);
-  padding: 20px;
+  padding: 24px 20px;
   overflow-y: auto;
   animation: slideIn 0.3s ease-out forwards;
   z-index: 1000;
@@ -24,10 +24,76 @@
 
 .close {
   position: absolute;
-  top: 10px;
-  right: 12px;
+  top: 16px;
+  right: 16px;
   font-size: 20px;
-  border: none;
-  background: none;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #d7d7d7;
+  border-radius: 999px;
+  background: white;
   cursor: pointer;
+}
+
+.imageWrap {
+  margin: 16px 0 20px;
+  text-align: center;
+}
+
+.imageWrap img {
+  width: min(100%, 320px);
+  height: auto;
+  border-radius: 12px;
+}
+
+.title {
+  margin: 0 0 20px;
+  padding-right: 48px;
+  font-size: 24px;
+  line-height: 1.3;
+}
+
+.metaList {
+  display: grid;
+  gap: 12px;
+  margin: 0 0 24px;
+}
+
+.metaList div {
+  padding-bottom: 12px;
+  border-bottom: 1px solid #efefef;
+}
+
+.metaList dt {
+  margin-bottom: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #5a5a5a;
+  text-transform: uppercase;
+}
+
+.metaList dd {
+  margin: 0;
+  color: #222;
+  word-break: break-word;
+}
+
+.descriptionSection h3 {
+  margin-bottom: 8px;
+}
+
+.descriptionSection p {
+  margin: 0;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+@media (max-width: 768px) {
+  .panel {
+    width: 100vw;
+    border-left: none;
+    box-shadow: none;
+  }
 }

@@ -1,86 +1,87 @@
 'use client'
 
+import Link from 'next/link'
+import styles from './pagination.module.css'
+
 type Props = {
-    currentPage: number;
-    totalCount?: number;
-    groupSize: number;
-    searchQuery : string;
+  currentPage: number
+  totalCount?: number
+  groupSize: number
+  searchQuery: string
 }
 
-export default function Pagination({ currentPage, totalCount = 1, groupSize, searchQuery = ''} : Props) {
-    const currentGroup = Math.floor((currentPage - 1) / groupSize);
-    const startPage = currentGroup * groupSize + 1;
-    const totalPage = Math.ceil(totalCount / groupSize);
-    const endPage = Math.min(startPage + groupSize - 1, totalPage);
+function createPageHref(page: number, searchQuery: string) {
+  const params = new URLSearchParams()
+  if (searchQuery) {
+    params.set('q', searchQuery)
+  }
+  params.set('page', String(page))
+  return `?${params.toString()}`
+}
 
-    const prevGroupPage = startPage -1;
-    const nextGroupPage = endPage + 1;
+export default function Pagination({ currentPage, totalCount = 1, groupSize, searchQuery = '' }: Props) {
+  const safePage = Math.max(currentPage, 1)
+  const currentGroup = Math.floor((safePage - 1) / groupSize)
+  const startPage = currentGroup * groupSize + 1
+  const totalPage = Math.max(Math.ceil(totalCount / groupSize), 1)
+  const endPage = Math.min(startPage + groupSize - 1, totalPage)
+  const prevGroupPage = Math.max(startPage - 1, 1)
+  const nextGroupPage = Math.min(endPage + 1, totalPage)
+  const canGoPrev = startPage > 1
+  const canGoNext = endPage < totalPage
 
-    return (
-        <div style={{ textAlign : "center"} }>
-            <div style={{ 
-                marginTop : '2rem',
-                display: "inline-flex",
-                alignItems: 'center',
-                gap: '15px',
-                // flexDirection: "row",
-                // justifyContent: "space-evenly",
-                }}>
-                {/* 가장 첫번쨰 페이지로 이동 */}
-                {(
-                    <a
-                        href={`?q=${searchQuery}&page=1`}
-                        style={{
-                            padding: '2px 4px',
-                            fontWeight: 'bold',
-                            color: "blue"
-                        }}>
-                    {`<<`}</a>
-                )}
-                {/* 이전 그룹으로 이동 */}
-                {(
-                    <a 
-                        href={`?q=${searchQuery}&page=${prevGroupPage}`}
-                        style={{
-                                padding: '0px 8px 0px 3px',
-                        }}
-                    >&lt;</a>
-
-                )}
-                {/* 페이지 */}
-                {Array.from({ length: endPage - startPage + 1}, (_, i) => {
-                    const page = startPage + i;
-                    const isActive = page === currentPage;
-                    return (
-                        <a
-                        key={page}
-                        href={`?q=${searchQuery}&page=${page}`}
-                        style = {{
-                            marginRight: '8px',
-                            fontWeight: isActive ? 'bold': 'normal',
-                            textDecoration: isActive? 'underline' : 'none',
-                        }}
-                        > 
-                        {page}
-                        </a>
-                    )
-                })}
-            {/* 다음 그룹으로 이동 */}
-            {endPage < totalPage && (
-                <a href={`?q=${searchQuery}&page=${nextGroupPage}`}>{`>`}</a>
-            )}
-
-            {/* 가장 마지막 페이지로 이동 */}
-            {currentPage < totalPage && (
-                <a
-                    href={`?page=${totalPage}`}
-                    style={{
-                        padding: '0px 0px 0px 6px',
-                        fontWeight: 'bold',
-                        color: "blue"
-                }}>{`>>`}</a>
-            )}
-            </div>
+  return (
+    <nav className={styles.nav} aria-label="Pagination">
+      <div className={styles.group}>
+        <Link
+          href={createPageHref(1, searchQuery)}
+          aria-disabled={!canGoPrev}
+          className={`${styles.control} ${!canGoPrev ? styles.disabled : ''}`}
+          tabIndex={canGoPrev ? 0 : -1}
+        >
+          {'<<'}
+        </Link>
+        <Link
+          href={createPageHref(prevGroupPage, searchQuery)}
+          aria-disabled={!canGoPrev}
+          className={`${styles.control} ${!canGoPrev ? styles.disabled : ''}`}
+          tabIndex={canGoPrev ? 0 : -1}
+        >
+          {'<'}
+        </Link>
+        <div className={styles.pages}>
+          {Array.from({ length: endPage - startPage + 1 }, (_, i) => {
+            const page = startPage + i
+            const isActive = page === safePage
+            return (
+              <Link
+                key={page}
+                href={createPageHref(page, searchQuery)}
+                aria-current={isActive ? 'page' : undefined}
+                className={`${styles.page} ${isActive ? styles.active : ''}`}
+              >
+                {page}
+              </Link>
+            )
+          })}
         </div>
-    );
+        <Link
+          href={createPageHref(nextGroupPage, searchQuery)}
+          aria-disabled={!canGoNext}
+          className={`${styles.control} ${!canGoNext ? styles.disabled : ''}`}
+          tabIndex={canGoNext ? 0 : -1}
+        >
+          {'>'}
+        </Link>
+        <Link
+          href={createPageHref(totalPage, searchQuery)}
+          aria-disabled={!canGoNext}
+          className={`${styles.control} ${!canGoNext ? styles.disabled : ''}`}
+          tabIndex={canGoNext ? 0 : -1}
+        >
+          {'>>'}
+        </Link>
+      </div>
+    </nav>
+  )
 }

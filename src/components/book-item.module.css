@@ -11,15 +11,19 @@ a.container {
 div.container {
   display: flex;
   gap: 15px;
+  align-items: flex-start;
+  width: 100%;
 }
 
 .container > img {
   width: 100px;
   height: 120px;
+  flex-shrink: 0;
 }
 
 .title {
   font-weight: bold;
+  word-break: break-word;
 }
 
 .subTitle {
@@ -28,4 +32,17 @@ div.container {
 
 .author {
   color: gray;
+}
+
+@media (max-width: 768px) {
+  a.container,
+  div.container {
+    gap: 12px;
+    padding: 16px 8px;
+  }
+
+  .container > img {
+    width: 80px;
+    height: 96px;
+  }
 }
