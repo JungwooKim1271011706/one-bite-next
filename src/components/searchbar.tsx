@@ -4,9 +4,17 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import style from "./serachbar.module.css";
 
-export default function Searchbar() {
+type Props = {
+  className?: string;
+  placeholder?: string;
+};
+
+export default function Searchbar({
+  className = "",
+  placeholder = "\uAC80\uC0C9\uC5B4\uB97C \uC785\uB825\uD558\uC138\uC694",
+}: Props) {
   const router = useRouter();
-  const searchParams = useSearchParams(); // 쿼리스트링을 꺼내올 수 있는 메서드
+  const searchParams = useSearchParams();
   const [search, setSearch] = useState("");
 
   const q = searchParams.get("q");
@@ -20,11 +28,14 @@ export default function Searchbar() {
   };
 
   const onSubmit = () => {
-    if (!search || q === search) {
-      router.push(`/`);
+    const nextSearch = search.trim();
+
+    if (!nextSearch) {
+      router.push("/");
       return;
-    } 
-    router.push(`/search?q=${search}&page=1`);
+    }
+
+    router.push(`/search?q=${encodeURIComponent(nextSearch)}&page=1`);
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -34,13 +45,14 @@ export default function Searchbar() {
   };
 
   return (
-    <div className={style.container}>
+    <div className={`${style.container} ${className}`.trim()}>
       <input
         value={search}
         onChange={onChangeSearch}
         onKeyDown={onKeyDown}
+        placeholder={placeholder}
       />
-      <button onClick={onSubmit}>검색</button>
+      <button onClick={onSubmit}>{"\uAC80\uC0C9"}</button>
     </div>
   );
 }
