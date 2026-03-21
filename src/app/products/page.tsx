@@ -1,29 +1,32 @@
 // app/products/page.tsx
 
 import CGCProductItem from "@/components/cgcProduct-item";
-import Pagination from "@/components/pagiation";
-import { connecttodatabase } from "@/lib/db/mongodb"
+import Pagination from "@/components/pagination";
+import { connecttodatabase } from "@/lib/db/mongodb";
 import CGCProduct from "@/models/CgcProduct";
 import { CGCproduct } from "@/types";
 
-
 type Props = {
-  searchParams? : Promise<{
-    page? : string;
+  searchParams?: Promise<{
+    page?: string;
   }>;
-}
+};
 
-export default async function ProductPage( { searchParams } : Props) {
+export default async function ProductPage({ searchParams }: Props) {
   await connecttodatabase();
 
   const params = await searchParams;
-  const page = Number(params?.page || '1');
+  const page = Number(params?.page || "1");
   const size = 10;
   const currentPage = Math.max(page, 1);
-  const rowCGCProducts = await CGCProduct.find().sort({id : 1}).limit(size);
-  const CGCProductsCount = rowCGCProducts.length;
+  const skip = (currentPage - 1) * size;
 
-  const CGCProducts: CGCproduct[] = rowCGCProducts.map(p => ({
+  const [rowCGCProducts, CGCProductsCount] = await Promise.all([
+    CGCProduct.find().sort({ id: 1 }).skip(skip).limit(size),
+    CGCProduct.countDocuments(),
+  ]);
+
+  const CGCProducts: CGCproduct[] = rowCGCProducts.map((p) => ({
     id: p.id,
     name: p.name,
     expirationDate: p.expirationDate,
@@ -44,10 +47,10 @@ export default async function ProductPage( { searchParams } : Props) {
     <div>
       <h1>상품 목록</h1>
       <ul>
-        {CGCProducts.map((cgcProduct, index) => (
-          <CGCProductItem key={index} {...cgcProduct} />)
-        )}
-        <Pagination currentPage={currentPage} totalCount={CGCProductsCount} groupSize={size} searchQuery=""/>
+        {CGCProducts.map((cgcProduct) => (
+          <CGCProductItem key={cgcProduct.id} {...cgcProduct} />
+        ))}
+        <Pagination currentPage={currentPage} totalCount={CGCProductsCount} groupSize={size} searchQuery="" />
       </ul>
     </div>
   );

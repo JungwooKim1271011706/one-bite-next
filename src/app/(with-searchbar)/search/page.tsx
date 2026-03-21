@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import BookListSkeleton from "@/components/skeleton/book-list-skeleton";
 import CGCProductItem from "@/components/cgcProduct-item";
-import Pagination from "@/components/pagiation";
+import Pagination from "@/components/pagination";
 import { getCGCProducts } from "@/lib/service/CGCProductService";
 import style from "./search-page.module.css";
 

@@ -1,5 +1,5 @@
 import CGCProductListWithPanel from "@/components/CGCProductListWithPanel";
-import Pagination from "@/components/pagiation";
+import Pagination from "@/components/pagination";
 import { getCGCProducts } from "@/lib/service/CGCProductService";
 import style from "./page.module.css";
 
