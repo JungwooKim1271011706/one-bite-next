@@ -18,22 +18,23 @@
   min-width: 40px;
   height: 40px;
   padding: 0 12px;
-  border: 1px solid #d0d7de;
+  border: 1px solid var(--pager-border);
   border-radius: 999px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: white;
-  color: #1f2937;
+  background: var(--pager-bg);
+  color: var(--pager-text);
   font-weight: 600;
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
   flex: 0 0 auto;
 }
 
 .control:hover,
 .page:hover {
-  background: #ecfdf5;
-  border-color: #86efac;
+  background: var(--pager-hover-bg);
+  border-color: var(--pager-hover-border);
+  transform: translateY(-1px);
 }
 
 .pages {
@@ -46,14 +47,14 @@
 .active {
   background: #16a34a;
   border-color: #16a34a;
-  color: white;
+  color: #fff;
 }
 
 .disabled {
   pointer-events: none;
-  color: #9ca3af;
-  background: #f3f4f6;
-  border-color: #e5e7eb;
+  color: var(--pager-disabled-text);
+  background: var(--pager-disabled-bg);
+  border-color: var(--pager-disabled-border);
 }
 
 @media (max-width: 768px) {

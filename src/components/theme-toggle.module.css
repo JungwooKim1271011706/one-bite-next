@@ -1,0 +1,30 @@
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--toggle-track);
+  border: 1px solid var(--toggle-track-border);
+}
+
+.iconBtn {
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--toggle-icon);
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.active {
+  background: var(--toggle-active-bg);
+  color: var(--toggle-active-icon);
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.35);
+}

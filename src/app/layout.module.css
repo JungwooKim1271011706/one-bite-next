@@ -1,9 +1,9 @@
 .container {
-  /* max-width: 600px; */
   max-width: 100%;
   min-height: 100vh;
   margin: 0 auto;
-  background-color: white;
+  background-color: var(--surface);
+  color: var(--text-primary);
   padding: 0px 15px;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
@@ -21,7 +21,7 @@
 
 .container > footer {
   padding: 100px 0px;
-  color: gray;
+  color: var(--text-muted);
 }
 
 .header {
@@ -29,14 +29,84 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
 }
 
-.header > button {
-  width: 70px;
-  border-radius: 5px;
-  border: none;
-  /* background-color: rgb(37, 147, 255); */
-  background-color: gray;
-  color: white;
+.brand {
+  min-width: 0;
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.brandLogo {
+  width: auto;
+  height: 32px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.brandText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.headerActions > button {
+  height: 36px;
+  min-width: 42px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid var(--button-border);
+  background-color: var(--button-bg);
+  color: var(--button-text);
   cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 10px;
+  }
+
+  .container > header {
+    height: 52px;
+    font-size: 14px;
+    line-height: 52px;
+  }
+
+  .header {
+    gap: 6px;
+  }
+
+  .brand {
+    gap: 6px;
+  }
+
+  .brandLogo {
+    height: 24px;
+  }
+
+  .brandText {
+    font-size: 12px;
+  }
+
+  .headerActions {
+    gap: 6px;
+  }
+
+  .headerActions > button {
+    height: 32px;
+    min-width: 36px;
+    padding: 0 8px;
+    font-size: 12px;
+  }
 }

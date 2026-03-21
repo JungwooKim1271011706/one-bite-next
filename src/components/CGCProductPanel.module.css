@@ -11,9 +11,10 @@
   right: 0;
   width: min(var(--panel-width, 420px), 100vw);
   height: 100%;
-  background: white;
-  border-left: 1px solid #d7d7d7;
-  box-shadow: -4px 0 10px rgba(0,0,0,0.2);
+  background: var(--panel-bg);
+  color: var(--panel-text);
+  border-left: 1px solid var(--panel-border);
+  box-shadow: var(--panel-shadow);
   padding: 24px 20px;
   overflow-y: auto;
   animation: slideIn 0.3s ease-out forwards;
@@ -31,24 +32,20 @@
 }
 
 .resizeHandle::after {
-  content: '';
+  content: ;
   position: absolute;
   top: 50%;
   left: 2px;
   width: 4px;
   height: 72px;
   border-radius: 999px;
-  background: #e5e7eb;
+  background: var(--panel-handle);
   transform: translateY(-50%);
 }
 
 @keyframes slideIn {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
 }
 
 .close {
@@ -58,9 +55,10 @@
   font-size: 20px;
   width: 36px;
   height: 36px;
-  border: 1px solid #d7d7d7;
+  border: 1px solid var(--panel-close-border);
   border-radius: 999px;
-  background: white;
+  background: var(--panel-close-bg);
+  color: var(--panel-close-text);
   cursor: pointer;
 }
 
@@ -90,7 +88,7 @@
 
 .metaList div {
   padding-bottom: 12px;
-  border-bottom: 1px solid #efefef;
+  border-bottom: 1px solid var(--panel-divider);
 }
 
 .metaList dt {
@@ -98,13 +96,13 @@
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.04em;
-  color: #5a5a5a;
+  color: var(--panel-label);
   text-transform: uppercase;
 }
 
 .metaList dd {
   margin: 0;
-  color: #222;
+  color: var(--panel-text);
   word-break: break-word;
 }
 
@@ -127,9 +125,9 @@
     width: auto;
     max-width: none;
     height: calc(100dvh - 16px);
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--panel-border);
     border-radius: 16px;
-    box-shadow: -2px 8px 24px rgba(0, 0, 0, 0.18);
+    box-shadow: var(--panel-shadow-mobile);
     padding: 18px 14px;
   }
 
@@ -155,11 +153,7 @@
     padding-bottom: 8px;
   }
 
-  .resizeHandle {
-    display: none;
-  }
+  .resizeHandle { display: none; }
 
-  .overlay {
-    background: rgba(17, 24, 39, 0.08);
-  }
+  .overlay { background: rgba(17, 24, 39, 0.08); }
 }
