@@ -11,9 +11,14 @@ type Props = {
   searchParams: Promise<{
     q?: string;
     page?: number | string;
-    category?: string;
+    category?: string | string[];
   }>;
 };
+
+function normalizeCategories(category?: string | string[]) {
+  if (!category) return [];
+  return Array.isArray(category) ? category.filter(Boolean) : [category];
+}
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const { q = "" } = await searchParams;
@@ -30,13 +35,14 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 }
 
 export default async function Page({ searchParams }: Props) {
-  const { q = "", page = "1", category = "" } = await searchParams;
+  const { q = "", page = "1", category } = await searchParams;
+  const selectedCategories = normalizeCategories(category);
   const pageNumber = Number(page);
   const size = 10;
-  const { cgcProducts, cgcProductsCount } = await getCGCProducts(pageNumber, size, q, category);
+  const { cgcProducts, cgcProductsCount } = await getCGCProducts(pageNumber, size, q, selectedCategories);
 
   return (
-    <Suspense key={`${q}-${category}`} fallback={<BookListSkeleton count={5} />}>
+    <Suspense key={`${q}-${selectedCategories.join(',')}`} fallback={<BookListSkeleton count={5} />}>
       <section className={style.summary}>
         <div className={style.field}>
           <span className={style.label}>검색어</span>
@@ -48,7 +54,7 @@ export default async function Page({ searchParams }: Props) {
         </div>
         <div className={style.field}>
           <span className={style.label}>카테고리</span>
-          <strong>{category || "전체"}</strong>
+          <strong>{selectedCategories.length > 0 ? selectedCategories.join(', ') : "전체"}</strong>
         </div>
         <div className={style.field}>
           <span className={style.label}>현재 페이지</span>
@@ -70,7 +76,7 @@ export default async function Page({ searchParams }: Props) {
         totalCount={cgcProductsCount}
         groupSize={size}
         searchQuery={q}
-        categoryQuery={category}
+        categoryQuery={selectedCategories}
       />
     </Suspense>
   );

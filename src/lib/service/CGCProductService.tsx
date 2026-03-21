@@ -6,7 +6,7 @@ export async function getCGCProducts(
   page: number,
   size: number,
   q?: string,
-  category?: string
+  category?: string | string[]
 ): Promise<{
   cgcProducts: CGCproduct[];
   cgcProductsCount: number;
@@ -26,8 +26,11 @@ export async function getCGCProducts(
     });
   }
 
-  if (category) {
-    filters.push({ category });
+  const categories = Array.isArray(category) ? category.filter(Boolean) : category ? [category] : [];
+  if (categories.length === 1) {
+    filters.push({ category: categories[0] });
+  } else if (categories.length > 1) {
+    filters.push({ category: { $in: categories } });
   }
 
   const searchQuery = filters.length > 0 ? { $and: filters } : {};

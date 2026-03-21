@@ -17,7 +17,7 @@ export default function CGCProductPanel({ product, onClose }: Props) {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 768) {
-        setWidth(window.innerWidth)
+        setWidth(Math.min(Math.floor(window.innerWidth * 0.92), 420))
         return
       }
       setWidth(current => Math.min(Math.max(current, 320), Math.floor(window.innerWidth * 0.7)))
@@ -52,7 +52,7 @@ export default function CGCProductPanel({ product, onClose }: Props) {
   }
 
   return (
-    <div className={styles.overlay} onClick={onClose} aria-hidden="true">
+    <div className={styles.overlay} onClick={onClose} aria-hidden='true'>
       <aside
         ref={panelRef}
         className={styles.panel}
@@ -63,11 +63,11 @@ export default function CGCProductPanel({ product, onClose }: Props) {
         <div
           className={styles.resizeHandle}
           onPointerDown={onResizeStart}
-          role="separator"
-          aria-orientation="vertical"
-          aria-label="Resize details panel"
+          role='separator'
+          aria-orientation='vertical'
+          aria-label='Resize details panel'
         />
-        <button className={styles.close} onClick={onClose} aria-label="Close details panel">
+        <button className={styles.close} onClick={onClose} aria-label='Close details panel'>
           x
         </button>
         {product.imageA && (
@@ -78,33 +78,33 @@ export default function CGCProductPanel({ product, onClose }: Props) {
         <h2 className={styles.title}>{product.name}</h2>
         <dl className={styles.metaList}>
           <div>
-            <dt>{'\uC720\uD1B5 \uAE30\uD55C'}</dt>
+            <dt>{'유통 기한'}</dt>
             <dd>{product.expirationDate || '-'}</dd>
           </div>
           <div>
-            <dt>{'\uAD8C\uC7A5 \uC18C\uB9E4\uAC00'}</dt>
+            <dt>{'권장 소매가'}</dt>
             <dd>{product.suggestedRetailPrice || '-'}</dd>
           </div>
           <div>
-            <dt>{'\uAD8C\uC7A5 \uB3C4\uB9E4\uAC00'}</dt>
+            <dt>{'권장 도매가'}</dt>
             <dd>{product.suggestedWholesalePrice || '-'}</dd>
           </div>
           <div>
-            <dt>{'\uADDC\uACA9'}</dt>
+            <dt>{'규격'}</dt>
             <dd>{product.specification || '-'}</dd>
           </div>
           <div>
-            <dt>{'\uAD6C\uBD84'}</dt>
+            <dt>{'구분'}</dt>
             <dd>{product.category || '-'}</dd>
           </div>
           <div>
-            <dt>{'\uD56D\uBAA9'}</dt>
+            <dt>{'항목'}</dt>
             <dd>{product.type || '-'}</dd>
           </div>
         </dl>
         <section className={styles.descriptionSection}>
-          <h3>{'\uC0C1\uC138 \uC124\uBA85'}</h3>
-          <p>{product.itemFeatures || '\uC0C1\uC138 \uC124\uBA85\uC774 \uC5C6\uC2B5\uB2C8\uB2E4.'}</p>
+          <h3>{'상세 설명'}</h3>
+          <p>{product.itemFeatures || '상세 설명이 없습니다.'}</p>
         </section>
       </aside>
     </div>

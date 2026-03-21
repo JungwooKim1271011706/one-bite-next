@@ -8,22 +8,31 @@ type Props = {
   totalCount?: number
   groupSize: number
   searchQuery: string
-  categoryQuery?: string
+  categoryQuery?: string | string[]
 }
 
-function createPageHref(page: number, searchQuery: string, categoryQuery?: string) {
+function normalizeCategories(categoryQuery?: string | string[]): string[] {
+  if (!categoryQuery) return []
+  if (Array.isArray(categoryQuery)) return categoryQuery.filter(Boolean)
+  return categoryQuery ? [categoryQuery] : []
+}
+
+function createPageHref(page: number, searchQuery: string, categoryQuery?: string | string[]) {
   const params = new URLSearchParams()
+
   if (searchQuery) {
     params.set('q', searchQuery)
   }
-  if (categoryQuery) {
-    params.set('category', categoryQuery)
-  }
+
+  normalizeCategories(categoryQuery).forEach(category => {
+    params.append('category', category)
+  })
+
   params.set('page', String(page))
   return `?${params.toString()}`
 }
 
-export default function Pagination({ currentPage, totalCount = 1, groupSize, searchQuery = '', categoryQuery = '' }: Props) {
+export default function Pagination({ currentPage, totalCount = 1, groupSize, searchQuery = '', categoryQuery }: Props) {
   const safePage = Math.max(currentPage, 1)
   const currentGroup = Math.floor((safePage - 1) / groupSize)
   const startPage = currentGroup * groupSize + 1

@@ -13,9 +13,16 @@
 
 .container > button {
   width: 80px;
-  border-radius: 5px;
-  border: none;
-  background-color: rgb(37, 147, 255);
+  min-height: 40px;
+  border-radius: 999px;
+  border: 1px solid #16a34a;
+  background-color: #16a34a;
   color: white;
+  font-weight: 600;
   cursor: pointer;
+}
+
+.container > button:hover {
+  background-color: #15803d;
+  border-color: #15803d;
 }

@@ -6,17 +6,22 @@ import style from "./page.module.css";
 type Props = {
   searchParams?: Promise<{
     page?: string;
-    category?: string;
+    category?: string | string[];
   }>;
 };
+
+function normalizeCategories(category?: string | string[]) {
+  if (!category) return [];
+  return Array.isArray(category) ? category.filter(Boolean) : [category];
+}
 
 export default async function Home({ searchParams }: Props) {
   const params = await searchParams;
   const page = Number(params?.page || "1");
-  const category = params?.category || "";
+  const selectedCategories = normalizeCategories(params?.category);
   const size = 10;
 
-  const { cgcProducts, cgcProductsCount } = await getCGCProducts(page, size, undefined, category);
+  const { cgcProducts, cgcProductsCount } = await getCGCProducts(page, size, undefined, selectedCategories);
 
   return (
     <div className={style.container}>
@@ -28,7 +33,7 @@ export default async function Home({ searchParams }: Props) {
           totalCount={cgcProductsCount}
           groupSize={10}
           searchQuery=""
-          categoryQuery={category}
+          categoryQuery={selectedCategories}
         />
       </section>
     </div>

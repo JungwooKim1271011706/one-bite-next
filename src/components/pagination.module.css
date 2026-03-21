@@ -6,7 +6,7 @@
 
 .group {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
   gap: 8px;
@@ -27,24 +27,25 @@
   color: #1f2937;
   font-weight: 600;
   transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  flex: 0 0 auto;
 }
 
 .control:hover,
 .page:hover {
-  background: #eff6ff;
-  border-color: #93c5fd;
+  background: #ecfdf5;
+  border-color: #86efac;
 }
 
 .pages {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 8px;
   justify-content: center;
 }
 
 .active {
-  background: #2563eb;
-  border-color: #2563eb;
+  background: #16a34a;
+  border-color: #16a34a;
   color: white;
 }
 
@@ -58,10 +59,29 @@
 @media (max-width: 768px) {
   .nav {
     margin-top: 20px;
+    justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0 8px 2px;
+    box-sizing: border-box;
+  }
+
+  .nav::-webkit-scrollbar {
+    display: none;
   }
 
   .group {
     gap: 6px;
+    flex-wrap: nowrap;
+    width: max-content;
+    min-width: max-content;
+    justify-content: flex-start;
+  }
+
+  .pages {
+    flex-wrap: nowrap;
   }
 
   .control,
