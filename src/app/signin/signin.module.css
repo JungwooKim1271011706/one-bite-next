@@ -65,3 +65,46 @@
   font-weight: 700;
   cursor: pointer;
 }
+
+.divider {
+  margin: 14px 0 10px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.oauthWrap {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.oauthBtn {
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--chip-border);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.google {
+  background: #fff;
+  color: #111827;
+}
+
+.naver {
+  background: #03c75a;
+  color: #fff;
+  border-color: #03c75a;
+}
+
+.kakao {
+  background: #fee500;
+  color: #191919;
+  border-color: #e6cf00;
+}
+
+:root[data-theme="dark"] .google {
+  background: #1f2937;
+  color: #e5e7eb;
+}
