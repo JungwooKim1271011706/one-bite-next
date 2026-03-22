@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
 import BookListSkeleton from "@/components/skeleton/book-list-skeleton";
-import CGCProductItem from "@/components/cgcProduct-item";
+import CGCProductListWithPanel from "@/components/CGCProductListWithPanel";
 import Pagination from "@/components/pagination";
 import { getCGCProducts } from "@/lib/service/CGCProductService";
 import style from "./search-page.module.css";
@@ -42,7 +42,7 @@ export default async function Page({ searchParams }: Props) {
   const { cgcProducts, cgcProductsCount } = await getCGCProducts(pageNumber, size, q, selectedCategories);
 
   return (
-    <Suspense key={`${q}-${selectedCategories.join(',')}`} fallback={<BookListSkeleton count={5} />}>
+    <Suspense key={`${q}-${selectedCategories.join(",")}`} fallback={<BookListSkeleton count={5} />}>
       <section className={style.summary}>
         <div className={style.field}>
           <span className={style.label}>검색어</span>
@@ -54,7 +54,7 @@ export default async function Page({ searchParams }: Props) {
         </div>
         <div className={style.field}>
           <span className={style.label}>카테고리</span>
-          <strong>{selectedCategories.length > 0 ? selectedCategories.join(', ') : "전체"}</strong>
+          <strong>{selectedCategories.length > 0 ? selectedCategories.join(", ") : "전체"}</strong>
         </div>
         <div className={style.field}>
           <span className={style.label}>현재 페이지</span>
@@ -66,9 +66,7 @@ export default async function Page({ searchParams }: Props) {
       </section>
 
       <div className={style.results}>
-        {cgcProducts.map((cgcProduct) => (
-          <CGCProductItem key={cgcProduct.id} {...cgcProduct} />
-        ))}
+        <CGCProductListWithPanel products={cgcProducts} />
       </div>
 
       <Pagination

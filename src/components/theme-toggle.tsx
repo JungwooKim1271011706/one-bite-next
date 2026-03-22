@@ -6,21 +6,30 @@ import styles from "./theme-toggle.module.css";
 type Theme = "light" | "dark";
 
 function applyTheme(theme: Theme) {
-  document.documentElement.setAttribute("data-theme", theme);
+  const html = document.documentElement;
+  html.setAttribute("data-theme", theme);
+  document.body?.setAttribute("data-theme", theme);
 }
 
 export default function ThemeToggle() {
   const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
-    const saved = (localStorage.getItem("theme") as Theme | null) ?? "light";
+    let saved: Theme = "light";
+    try {
+      saved = (localStorage.getItem("theme") as Theme | null) ?? "light";
+    } catch {
+      saved = "light";
+    }
     setTheme(saved);
     applyTheme(saved);
   }, []);
 
   const onSetTheme = (next: Theme) => {
     setTheme(next);
-    localStorage.setItem("theme", next);
+    try {
+      localStorage.setItem("theme", next);
+    } catch {}
     applyTheme(next);
   };
 
